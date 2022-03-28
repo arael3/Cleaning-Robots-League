@@ -145,3 +145,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombExplode: {fileID: 0}
+  teamBluePlayer: {fileID: 0}
+  teamBlueNPCTop: {fileID: 0}
+  teamBlueNPCMiddle: {fileID: 0}
+  teamBlueNPCBottom: {fileID: 0}
+  teamRedPlayer: {fileID: 0}
+  teamRedNPCTop: {fileID: 0}
+  teamRedNPCMiddle: {fileID: 0}
+  teamRedNPCBottom: {fileID: 0}

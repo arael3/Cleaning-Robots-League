@@ -151,7 +151,7 @@ public class NPCController : MonoBehaviour
     float waitTimeBeforeShoot = 0.11f;
     const float waitTimeBeforeShootRestart = 0.11f;
 
-    public float holdBombTimer = 11.5f;
+    public float holdBombTimer = 21.5f;
 
     public float HoldBombTimer
     {
@@ -159,7 +159,7 @@ public class NPCController : MonoBehaviour
         set { holdBombTimer = value; }
     }
 
-    public const float restartholdBombTimer = 11.5f;
+    public const float restartholdBombTimer = 21.5f;
 
     float movementBlockingDuration = 0;
     float rbPositionXCopy;
@@ -320,19 +320,19 @@ public class NPCController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log("bomb.layer " + bomb.layer);
         if (holdBomb)
         {
             holdBombTimer -= Time.deltaTime;
             holdBombSprite.enabled = true;
-            bomb.layer = 6;
+            //bomb.layer = 6;
         }
         else
         {
             // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
             holdBombTimer = restartholdBombTimer;
             holdBombSprite.enabled = false;
-            bomb.layer = 0;
+            //bomb.layer = 0;
             isPassingRandom = false;
             isPassing = false;
             isShooting = false;
@@ -395,21 +395,24 @@ public class NPCController : MonoBehaviour
         if (holdBomb && (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            bomb.GetComponent<Renderer>().enabled = false;
+            //bomb.GetComponent<Renderer>().enabled = false;
             holdBombSprite.enabled = true;
             bomb.transform.position = shootingPoint.position;
+            //bomb.transform.position = gameObject.transform.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
+            Debug.Log("Trzyma bombe i co 1");
         }
-
+        Debug.Log("bomb.GetComponent<Rigidbody2D>().bodyType = " + bomb.GetComponent<Rigidbody2D>().bodyType);
         // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
         // In other words, if the NPC reached a random point, complete the task from the condition below
         if (holdBomb && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.transform.position = shootingPoint.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
+            Debug.Log("Trzyma bombe i co 2");
         }
 
-        // Defence
+        // DEFENCE ----------------------------------------
         if (shieldSprite.enabled)
         {
             shieldDuration -= Time.deltaTime;
@@ -1045,7 +1048,7 @@ public class NPCController : MonoBehaviour
                 {
                     //NPCController.Shoot(bomb, shootForce);
                     Shooting.Shoot(bomb);
-                    bomb.layer = 0;
+                    //bomb.layer = 0;
                     holdBomb = false;
                     isShooting = false;
                     ifDrawFieldPoint = true;
@@ -1077,7 +1080,7 @@ public class NPCController : MonoBehaviour
                 {
                     //NPCController.Shoot(bomb, shootForce);
                     Shooting.Shoot(bomb);
-                    bomb.layer = 0;
+                    //bomb.layer = 0;
                     holdBomb = false;
                     isPassing = false;
                     ifDrawFieldPoint = true;
@@ -1184,6 +1187,7 @@ public class NPCController : MonoBehaviour
             {
                 lookDir = new Vector2(-rb.position.x, -rb.position.y);
                 objectToPassSelected = true;
+                Debug.Log("-rb.position");
             }
 
             angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
@@ -1198,7 +1202,7 @@ public class NPCController : MonoBehaviour
                 {
                     //NPCController.Shoot(bomb, shootForce);
                     Shooting.Shoot(bomb);
-                    bomb.layer = 0;
+                    //bomb.layer = 0;
                     holdBomb = false;
                     isPassingRandom = false;
                     ifDrawFieldPoint = true;

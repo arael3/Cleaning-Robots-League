@@ -17,7 +17,60 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject teamRedNPCBottom;
 
     public static bool onGround = true;
-    
+
+    bool ifAnyPlayerOrNPCHoldBomb = false;
+
+    bool teamBluePlayerHoldBomb = false;
+    bool teamBlueNPCTopHoldBomb = false;
+    bool teamBlueNPCMiddleHoldBomb = false;
+    bool teamBlueNPCBottomHoldBomb = false;
+    bool teamRedPlayerHoldBomb = false;
+    bool teamRedNPCTopHoldBomb = false;
+    bool teamRedNPCMiddleHoldBomb = false;
+    bool teamRedNPCBottomHoldBomb = false;
+
+    private void Update()
+    {
+        GameObject[] NPCandPlayers = { teamBluePlayer, teamBlueNPCTop, teamBlueNPCMiddle, teamBlueNPCBottom, teamRedPlayer, teamRedNPCTop, teamRedNPCMiddle, teamRedNPCBottom };
+        string[] NPCandPlayersNames = { "TeamBluePlayer", "TeamBlueNPCTop", "TeamBlueNPCMiddle", "TeamBlueNPCBottom", "TeamRedNPCPlayer", "TeamRedNPCTop", "TeamRedNPCMiddle", "TeamRedNPCBottom" };
+
+        bool ifAnyPlayerOrNPCHoldBombChecker = false;
+
+        int i = 0;
+        // if Any Player Or NPC Hold Bomb
+        foreach (string item in NPCandPlayersNames)
+        {
+            if (GameObject.Find(item) != null)
+            {
+                if (NPCandPlayers[i].GetComponent<PlayerController>())
+                {
+                    if (NPCandPlayers[i].GetComponent<PlayerController>().HoldBomb)
+                    {
+                        ifAnyPlayerOrNPCHoldBomb = true;
+                        ifAnyPlayerOrNPCHoldBombChecker = true;
+                        gameObject.layer = 6;
+                    }
+                }
+                else
+                {
+                    if (NPCandPlayers[i].GetComponent<NPCController>().HoldBomb)
+                    {
+                        ifAnyPlayerOrNPCHoldBomb = true;
+                        ifAnyPlayerOrNPCHoldBombChecker = true;
+                        gameObject.layer = 6;
+                    }
+                }
+            }
+            i++;
+        }
+
+        if (!ifAnyPlayerOrNPCHoldBombChecker)
+        {
+            ifAnyPlayerOrNPCHoldBomb = false;
+            gameObject.layer = 0;
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         
@@ -84,7 +137,5 @@ public class Bomb : MonoBehaviour
                 teamRedNPCBottom.GetComponent<NPCController>().HoldBomb = true;
             }
         }
-
-        
     }
 }

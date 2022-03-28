@@ -330,22 +330,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: NPCBottom
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: TeamRedNPCTop
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: TeamBlueNPCTop
-      value: 
-      objectReference: {fileID: 648451352}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: TeamBluePlayer
-      value: 
-      objectReference: {fileID: 1514394201}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
       propertyPath: teamBlueNPCTop
       value: 
       objectReference: {fileID: 648451352}
@@ -354,17 +338,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1514394201}
     - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: TeamRedNPCBottom
-      value: 
-      objectReference: {fileID: 1899012606}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
       propertyPath: teamRedNPCBottom
       value: 
       objectReference: {fileID: 1899012606}
-    - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
-      propertyPath: TeamBlueNPCBottom
-      value: 
-      objectReference: {fileID: 1414596595}
     - target: {fileID: 5833712144762014660, guid: c68c90df89c68c04fa90035096254006, type: 3}
       propertyPath: teamBlueNPCBottom
       value: 
@@ -3401,7 +3377,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!4 &648451357
 Transform:
   m_ObjectHideFlags: 0

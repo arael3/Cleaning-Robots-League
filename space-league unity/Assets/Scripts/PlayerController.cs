@@ -66,6 +66,10 @@ public class PlayerController : MonoBehaviour
 
     float waitForAttackRestart = 1.5f;
 
+    float shortPauseBeforeAttack = 0.06f;
+
+    float shortPauseBeforeAttackRestart = 0.06f;
+
     float enemyDistanceX;
     float enemyDistanceY;
 
@@ -179,7 +183,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(gameObject.name + ": " + holdBomb);
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
@@ -188,12 +191,13 @@ public class PlayerController : MonoBehaviour
         if (holdBomb)
         {
             holdBombTimer -= Time.deltaTime;
-            bomb.layer = 6;
+            //bomb.layer = 6;
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            bomb.GetComponent<Renderer>().enabled = false;
+            //bomb.GetComponent<Renderer>().enabled = false;
             holdBombSprite.enabled = true;
             //bomb.transform.position = new Vector3(0, 0, -100f);
             bomb.transform.position = shootingPoint.position;
+            //bomb.transform.position = gameObject.transform.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
         }
         else
@@ -201,10 +205,10 @@ public class PlayerController : MonoBehaviour
             // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
             holdBombTimer = restartholdBombTimer;
             holdBombSprite.enabled = false;
-            bomb.layer = 0;
+            //bomb.layer = 0;
         }
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !GameScreen.ifPause)
         {
             if (holdBomb)
             {
@@ -228,7 +232,7 @@ public class PlayerController : MonoBehaviour
             if (timeForShipAnimation >= .05f)
             {
                 Shooting.Shoot(bomb);
-                bomb.layer = 0;
+                //bomb.layer = 0;
                 holdBomb = false;
                 holdBombTimer = restartholdBombTimer;
                 holdBombSprite.enabled = false;
@@ -254,75 +258,83 @@ public class PlayerController : MonoBehaviour
         //else if (TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyDistanceX < 2) && (enemyDistanceY < 2))
         else if (ifEnemyNPCNearbyForAttack && waitForAttack <= 0)
         {
-            //atackSprite.enabled = true;
-            duringAttack = true;
-            waitForAttack = waitForAttackRestart;
+            shortPauseBeforeAttack -= Time.deltaTime;
+            //Debug.Log("shortPauseBeforeAttack " + shortPauseBeforeAttack);
 
-            GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
-
-            attackAnimationInst.transform.parent = gameObject.transform;
-
-            SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
-
-            if (attackAnimationSprite)
+            if (shortPauseBeforeAttack <= 0)
             {
-                attackAnimationSprite.sortingOrder = 2;
-            }
+                //atackSprite.enabled = true;
+                duringAttack = true;
+                waitForAttack = waitForAttackRestart;
 
-            Destroy(attackAnimationInst, .4f);
+                GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
 
-            // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
-            //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)
-            //{
-            //    TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb = false;
-            //    holdBomb = true;
-            //}
+                attackAnimationInst.transform.parent = gameObject.transform;
 
+                SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
 
-            if (ifEnemyNPCTopNearbyForAttack)
-            {
-                if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                if (attackAnimationSprite)
                 {
-                    enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
-                    enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                    HoldBomb = true;
+                    attackAnimationSprite.sortingOrder = 2;
+                }
+
+                Destroy(attackAnimationInst, .4f);
+
+                // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
+                //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)
+                //{
+                //    TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb = false;
+                //    holdBomb = true;
+                //}
+
+
+                if (ifEnemyNPCTopNearbyForAttack)
+                {
+                    if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    {
+                        enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
+                        enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                        HoldBomb = true;
+                    }
+                }
+
+                if (ifEnemyNPCMiddleNearbyForAttack)
+                {
+                    if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    {
+                        enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
+                        enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                        HoldBomb = true;
+                    }
+                }
+
+                if (ifEnemyPlayerNearbyForAttack)
+                {
+                    // !!! Trzeba dorobiæ tarczê dla gracza
+
+                    //if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                    if (true)
+                    {
+                        enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
+                        enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                        HoldBomb = true;
+                    }
+                }
+
+                if (ifEnemyNPCBottomNearbyForAttack)
+                {
+                    if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    {
+                        enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
+                        enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                        HoldBomb = true;
+                    }
                 }
             }
-
-            if (ifEnemyNPCMiddleNearbyForAttack)
+            else
             {
-                if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
-                {
-                    enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
-                    enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                    HoldBomb = true;
-                }
+                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
             }
-
-            if (ifEnemyPlayerNearbyForAttack)
-            {
-                // !!! Trzeba dorobiæ tarczê dla gracza
-
-                //if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                if (true)
-                {
-                    enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
-                    enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
-                    HoldBomb = true;
-                }
-            }
-
-            if (ifEnemyNPCBottomNearbyForAttack)
-            {
-                if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
-                {
-                    enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
-                    enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                    HoldBomb = true;
-                }
-            }
-
-
         }
 
         if (waitForAttack > 0)
