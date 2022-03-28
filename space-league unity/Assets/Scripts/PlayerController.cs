@@ -1,0 +1,425 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float moveSpeed = 8f;
+
+    public Rigidbody2D rb;
+    public Renderer holdBombSprite;
+    public Transform shootingPoint;
+    public Camera cam;
+
+    [SerializeField] GameObject teamBlueNPCTop;
+    [SerializeField] GameObject teamBlueNPCMiddle;
+    [SerializeField] GameObject teamBluePlayer;
+    [SerializeField] GameObject teamBlueNPCBottom;
+
+    [SerializeField] GameObject teamRedNPCTop;
+    [SerializeField] GameObject teamRedNPCMiddle;
+    [SerializeField] GameObject teamRedPlayer;
+    [SerializeField] GameObject teamRedNPCBottom;
+
+    GameObject enemyNPCTop;
+    GameObject enemyNPCMiddle;
+    GameObject enemyPlayer;
+    GameObject enemyNPCBottom;
+
+    GameObject friendNPCTop;
+    GameObject friendNPCMiddle;
+    GameObject friendNPCBottom;
+
+    bool ifEnemyNPCNearbyForAttack = false;
+    bool ifEnemyNPCTopNearbyForAttack = false;
+    bool ifEnemyNPCMiddleNearbyForAttack = false;
+    bool ifEnemyPlayerNearbyForAttack = false;
+    bool ifEnemyNPCBottomNearbyForAttack = false;
+
+    float enemyNPCTopDistance;
+    float enemyNPCMiddleDistance;
+    float enemyPlayerDistance;
+    float enemyNPCBottomDistance;
+
+    float minimumDistanceForAttackActivate = 2.0f;
+
+    Vector2 movement;
+    Vector2 mousePos;
+
+    public GameObject bomb;
+
+    public GameObject shootAnimation;
+
+    [SerializeField] Rigidbody2D enemy;
+
+    [SerializeField] GameObject attackAnimation;
+
+    public Vector2 lookDir;
+
+    bool duringAttack = false;
+
+    float attackDuration = 0.15f;
+
+    float attackDurationRestart = 0.15f;
+
+    float waitForAttack = 1.5f;
+
+    float waitForAttackRestart = 1.5f;
+
+    float enemyDistanceX;
+    float enemyDistanceY;
+
+    float timeForShipAnimation = 0;
+
+    bool waitForShoot = false;
+
+    static bool holdBomb = false;
+
+    public bool HoldBomb
+    {
+        get { return holdBomb; }
+        set { holdBomb = value; }
+    }
+
+    public float holdBombTimer = 1.5f;
+
+    public float HoldBombTimer
+    {
+        get { return holdBombTimer; }
+        set { holdBombTimer = value; }
+    }
+
+    const float restartholdBombTimer = 1.5f;
+
+    private void Start()
+    {
+        //transform.position = new Vector3(-3.0f, 0f, 0f);
+        transform.position = new Vector3(0f, 0f, 0f);
+
+        // Finding which team the NPC belongs to
+        if (gameObject.name == "TeamBluePlayer")
+        {
+            if (teamRedNPCTop)
+            {
+                enemyNPCTop = teamRedNPCTop;
+            }
+
+            if (teamRedNPCMiddle)
+            {
+                enemyNPCMiddle = teamRedNPCMiddle;
+            }
+
+            if (teamRedPlayer)
+            {
+                enemyPlayer = teamRedPlayer;
+            }
+
+            if (teamRedNPCBottom)
+            {
+                enemyNPCBottom = teamRedNPCBottom;
+            }
+
+            if (teamBlueNPCTop)
+            {
+                friendNPCTop = teamBlueNPCTop;
+            }
+
+            if (teamBlueNPCMiddle)
+            {
+                friendNPCMiddle = teamBlueNPCMiddle;
+            }
+
+            if (teamBlueNPCBottom)
+            {
+                friendNPCBottom = teamBlueNPCBottom;
+            }
+
+        }
+        else
+        {
+            if (teamBlueNPCTop)
+            {
+                enemyNPCTop = teamBlueNPCTop;
+            }
+
+            if (teamBlueNPCMiddle)
+            {
+                enemyNPCMiddle = teamBlueNPCMiddle;
+            }
+
+            if (teamBluePlayer)
+            {
+                enemyPlayer = teamBluePlayer;
+            }
+
+            if (teamBlueNPCBottom)
+            {
+                enemyNPCBottom = teamBlueNPCBottom;
+            }
+
+
+            if (teamRedNPCTop)
+            {
+                friendNPCTop = teamRedNPCTop;
+            }
+
+            if (teamRedNPCMiddle)
+            {
+                friendNPCMiddle = teamRedNPCMiddle;
+            }
+
+            if (teamRedNPCBottom)
+            {
+                friendNPCBottom = teamRedNPCBottom;
+            }
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Debug.Log(gameObject.name + ": " + holdBomb);
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+
+        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+
+        if (holdBomb)
+        {
+            holdBombTimer -= Time.deltaTime;
+            bomb.layer = 6;
+            bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            bomb.GetComponent<Renderer>().enabled = false;
+            holdBombSprite.enabled = true;
+            //bomb.transform.position = new Vector3(0, 0, -100f);
+            bomb.transform.position = shootingPoint.position;
+            bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
+        }
+        else
+        {
+            // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
+            holdBombTimer = restartholdBombTimer;
+            holdBombSprite.enabled = false;
+            bomb.layer = 0;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (holdBomb)
+            {
+                waitForShoot = true;
+
+                GameObject shootAnimInst = Instantiate(shootAnimation, transform.position, transform.rotation);
+                shootAnimInst.transform.parent = gameObject.transform;
+                SpriteRenderer shootAnimInstSprite = shootAnimInst.GetComponent<SpriteRenderer>();
+                if (shootAnimInstSprite)
+                {
+                    shootAnimInstSprite.sortingOrder = 2;
+                }
+                Destroy(shootAnimInst, .4f);
+            }
+        }
+
+        if (waitForShoot)
+        {
+            timeForShipAnimation += Time.deltaTime;
+
+            if (timeForShipAnimation >= .05f)
+            {
+                Shooting.Shoot(bomb);
+                bomb.layer = 0;
+                holdBomb = false;
+                holdBombTimer = restartholdBombTimer;
+                holdBombSprite.enabled = false;
+
+                waitForShoot = false;
+                timeForShipAnimation = 0;
+            }
+
+        }
+
+        // Attack
+        if (duringAttack)
+        {
+            attackDuration -= Time.deltaTime;
+
+            if (attackDuration <= 0)
+            {
+                //atackSprite.enabled = false;
+                duringAttack = false;
+                attackDuration = attackDurationRestart;
+            }
+        }
+        //else if (TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyDistanceX < 2) && (enemyDistanceY < 2))
+        else if (ifEnemyNPCNearbyForAttack && waitForAttack <= 0)
+        {
+            //atackSprite.enabled = true;
+            duringAttack = true;
+            waitForAttack = waitForAttackRestart;
+
+            GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
+
+            attackAnimationInst.transform.parent = gameObject.transform;
+
+            SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
+
+            if (attackAnimationSprite)
+            {
+                attackAnimationSprite.sortingOrder = 2;
+            }
+
+            Destroy(attackAnimationInst, .4f);
+
+            // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
+            //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)
+            //{
+            //    TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb = false;
+            //    holdBomb = true;
+            //}
+
+
+            if (ifEnemyNPCTopNearbyForAttack)
+            {
+                if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                {
+                    enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
+                    enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                    HoldBomb = true;
+                }
+            }
+
+            if (ifEnemyNPCMiddleNearbyForAttack)
+            {
+                if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                {
+                    enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
+                    enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                    HoldBomb = true;
+                }
+            }
+
+            if (ifEnemyPlayerNearbyForAttack)
+            {
+                // !!! Trzeba dorobiæ tarczê dla gracza
+
+                //if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                if (true)
+                {
+                    enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
+                    enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                    HoldBomb = true;
+                }
+            }
+
+            if (ifEnemyNPCBottomNearbyForAttack)
+            {
+                if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                {
+                    enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
+                    enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                    HoldBomb = true;
+                }
+            }
+
+
+        }
+
+        if (waitForAttack > 0)
+        {
+            if (!duringAttack)
+            {
+                waitForAttack -= Time.deltaTime;
+            }
+        }
+
+    }
+
+    void FixedUpdate()
+    {
+        // Behavior when an enemy player is nearby.
+        //enemyDistanceX = Mathf.Abs(rb.position.x - enemy.position.x);
+        //enemyDistanceY = Mathf.Abs(rb.position.y - enemy.position.y);
+
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        
+        //cam.transform.position = rb.position;
+        
+        lookDir = mousePos - rb.position;
+
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+        rb.rotation = angle;
+
+
+        // Behavior when an enemy player is nearby.
+        if (enemyNPCTop)
+        {
+            enemyNPCTopDistance = Vector2.Distance(rb.position, enemyNPCTop.GetComponent<Rigidbody2D>().position);
+
+            if (enemyNPCTop.GetComponent<NPCController>().HoldBomb && enemyNPCTopDistance < minimumDistanceForAttackActivate)
+            {
+                ifEnemyNPCTopNearbyForAttack = true;
+            }
+            else
+            {
+                ifEnemyNPCTopNearbyForAttack = false;
+            }
+
+        }
+
+        if (enemyNPCMiddle)
+        {
+
+            enemyNPCMiddleDistance = Vector2.Distance(rb.position, enemyNPCMiddle.GetComponent<Rigidbody2D>().position);
+
+            if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb && enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
+            {
+                ifEnemyNPCMiddleNearbyForAttack = true;
+            }
+            else
+            {
+                ifEnemyNPCMiddleNearbyForAttack = false;
+            }
+        }
+
+        if (enemyPlayer)
+        {
+
+            enemyPlayerDistance = Vector2.Distance(rb.position, enemyPlayer.GetComponent<Rigidbody2D>().position);
+
+            if (enemyPlayer.GetComponent<PlayerController>().HoldBomb && enemyPlayerDistance < minimumDistanceForAttackActivate)
+            {
+                ifEnemyPlayerNearbyForAttack = true;
+            }
+            else
+            {
+                ifEnemyPlayerNearbyForAttack = false;
+            }
+        }
+
+        if (enemyNPCBottom)
+        {
+            enemyNPCBottomDistance = Vector2.Distance(rb.position, enemyNPCBottom.GetComponent<Rigidbody2D>().position);
+
+            if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb && enemyNPCBottomDistance < minimumDistanceForAttackActivate)
+            {
+                ifEnemyNPCBottomNearbyForAttack = true;
+            }
+            else
+            {
+                ifEnemyNPCBottomNearbyForAttack = false;
+            }
+        }
+
+        if (ifEnemyNPCTopNearbyForAttack || ifEnemyNPCMiddleNearbyForAttack || ifEnemyPlayerNearbyForAttack || ifEnemyNPCBottomNearbyForAttack)
+        {
+            ifEnemyNPCNearbyForAttack = true;
+        }
+        else
+        {
+            ifEnemyNPCNearbyForAttack = false;
+        }
+
+    }
+}
