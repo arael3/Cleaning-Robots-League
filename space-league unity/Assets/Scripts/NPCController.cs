@@ -114,7 +114,7 @@ public class NPCController : MonoBehaviour
 
     float shieldDurationRestart = 1.5f;
 
-    float waitForShield = 1.8f;
+    float waitForShield = 0f;
 
     float waitForShieldRestart = 1.8f;
 
@@ -124,7 +124,7 @@ public class NPCController : MonoBehaviour
 
     float attackDurationRestart = 0.15f;
 
-    float waitForAttack = 1.5f;
+    float waitForAttack = 0f;
 
     float waitForAttackRestart = 1.5f;
 
@@ -508,7 +508,7 @@ public class NPCController : MonoBehaviour
                 ifEnemyNPCTopNearbyForMovementBlocking = false;
             }
 
-            if (enemyNPCTop.GetComponent<NPCController>().HoldBomb && enemyNPCTopDistance < minimumDistanceForAttackActivate)
+            if (enemyNPCTopDistance < minimumDistanceForAttackActivate)
             {
                 ifEnemyNPCTopNearbyForAttack = true;
             }
@@ -551,7 +551,7 @@ public class NPCController : MonoBehaviour
                 ifEnemyNPCMiddleNearbyForMovementBlocking = false;
             }
 
-            if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb && enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
+            if (enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
             {
                 ifEnemyNPCMiddleNearbyForAttack = true;
             }
@@ -593,7 +593,7 @@ public class NPCController : MonoBehaviour
                 ifEnemyPlayerNearbyForMovementBlocking = false;
             }
 
-            if (enemyPlayer.GetComponent<PlayerController>().HoldBomb && enemyPlayerDistance < minimumDistanceForAttackActivate)
+            if (enemyPlayerDistance < minimumDistanceForAttackActivate)
             {
                 ifEnemyPlayerNearbyForAttack = true;
             }
@@ -634,7 +634,7 @@ public class NPCController : MonoBehaviour
                 ifEnemyNPCBottomNearbyForMovementBlocking = false;
             }
 
-            if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb && enemyNPCBottomDistance < minimumDistanceForAttackActivate)
+            if (enemyNPCBottomDistance < minimumDistanceForAttackActivate)
             {
                 ifEnemyNPCBottomNearbyForAttack = true;
             }
@@ -1181,7 +1181,6 @@ public class NPCController : MonoBehaviour
             {
                 lookDir = new Vector2(-rb.position.x, -rb.position.y);
                 objectToPassSelected = true;
-                Debug.Log("-rb.position");
             }
 
             angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
@@ -1457,44 +1456,53 @@ public class NPCController : MonoBehaviour
 
                 if (ifEnemyNPCTopNearbyForAttack)
                 {
-                    if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyNPCMiddleNearbyForAttack)
                 {
-                    if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyPlayerNearbyForAttack)
                 {
-                    // !!! Trzeba dorobiæ tarczê dla gracza
-
-                    if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                    //if (true)
+                    if (enemyPlayer.GetComponent<PlayerController>().HoldBomb)
                     {
-                        enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
-                        enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                        {
+                            enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
+                            enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyNPCBottomNearbyForAttack)
                 {
-                    if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
             }

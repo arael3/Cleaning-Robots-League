@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     float shieldDurationRestart = 1.5f;
 
-    float waitForShield = 1.8f;
+    float waitForShield = 0f;
 
     float waitForShieldRestart = 1.8f;
 
@@ -72,13 +72,15 @@ public class PlayerController : MonoBehaviour
         set { shieldSpriteEnabled = value; }
     }
 
+    bool beforeAttack = false;
+
     bool duringAttack = false;
 
-    float attackDuration = 0.15f;
+    float attackDuration = 1.15f;
 
-    float attackDurationRestart = 0.15f;
+    float attackDurationRestart = 1.15f;
 
-    float waitForAttack = 1.5f;
+    float waitForAttack = 0f;
 
     float waitForAttackRestart = 1.5f;
 
@@ -267,7 +269,7 @@ public class PlayerController : MonoBehaviour
                 shieldDuration = shieldDurationRestart;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && waitForShield <= 0)
+        else if (Input.GetKeyDown(KeyCode.E) && waitForShield <= 0)
         {
             shieldSprite.enabled = true;
             shieldSpriteEnabled = true;
@@ -295,8 +297,9 @@ public class PlayerController : MonoBehaviour
             }
         }
         //else if (TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyDistanceX < 2) && (enemyDistanceY < 2))
-        else if (ifEnemyNPCNearbyForAttack && waitForAttack <= 0)
+        else if ((Input.GetKeyDown(KeyCode.Space) && waitForAttack <= 0) || beforeAttack)
         {
+            beforeAttack = true;
             shortPauseBeforeAttack -= Time.deltaTime;
             //Debug.Log("shortPauseBeforeAttack " + shortPauseBeforeAttack);
 
@@ -305,6 +308,7 @@ public class PlayerController : MonoBehaviour
                 //atackSprite.enabled = true;
                 duringAttack = true;
                 waitForAttack = waitForAttackRestart;
+                beforeAttack = false;
 
                 GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
 
@@ -329,51 +333,60 @@ public class PlayerController : MonoBehaviour
 
                 if (ifEnemyNPCTopNearbyForAttack)
                 {
-                    if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyNPCMiddleNearbyForAttack)
                 {
-                    if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyPlayerNearbyForAttack)
                 {
-                    // !!! Trzeba dorobiæ tarczê dla gracza
-
-                    //if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                    if (true)
+                    if (enemyPlayer.GetComponent<PlayerController>().HoldBomb)
                     {
-                        enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
-                        enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                        {
+                            enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
+                            enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
 
                 if (ifEnemyNPCBottomNearbyForAttack)
                 {
-                    if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                    if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
                     {
-                        enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
-                        enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                        HoldBomb = true;
+                        if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        {
+                            enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
+                            enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                            HoldBomb = true;
+                        }
                     }
                 }
             }
-            else
-            {
-                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
-            }
+        }
+        else
+        {
+            shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
         }
 
         if (waitForAttack > 0)
