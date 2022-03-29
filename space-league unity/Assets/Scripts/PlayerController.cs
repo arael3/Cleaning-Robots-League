@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public Renderer holdBombSprite;
     public Transform shootingPoint;
+    [SerializeField] Renderer shieldSprite;
     public Camera cam;
 
     [SerializeField] GameObject teamBlueNPCTop;
@@ -55,6 +56,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject attackAnimation;
 
     public Vector2 lookDir;
+
+    float shieldDuration = 1.5f;
+
+    float shieldDurationRestart = 1.5f;
+
+    float waitForShield = 1.8f;
+
+    float waitForShieldRestart = 1.8f;
+
+    bool shieldSpriteEnabled;
+    public bool ShieldSpriteEnabled
+    {
+        get { return shieldSpriteEnabled; }
+        set { shieldSpriteEnabled = value; }
+    }
 
     bool duringAttack = false;
 
@@ -191,13 +207,10 @@ public class PlayerController : MonoBehaviour
         if (holdBomb)
         {
             holdBombTimer -= Time.deltaTime;
-            //bomb.layer = 6;
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            //bomb.GetComponent<Renderer>().enabled = false;
+            bomb.GetComponent<Renderer>().enabled = false;
             holdBombSprite.enabled = true;
-            //bomb.transform.position = new Vector3(0, 0, -100f);
             bomb.transform.position = shootingPoint.position;
-            //bomb.transform.position = gameObject.transform.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
         }
         else
@@ -205,7 +218,6 @@ public class PlayerController : MonoBehaviour
             // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
             holdBombTimer = restartholdBombTimer;
             holdBombSprite.enabled = false;
-            //bomb.layer = 0;
         }
 
         if (Input.GetButtonDown("Fire1") && !GameScreen.ifPause)
@@ -241,6 +253,33 @@ public class PlayerController : MonoBehaviour
                 timeForShipAnimation = 0;
             }
 
+        }
+
+        // DEFENCE ----------------------------------------
+        if (shieldSprite.enabled)
+        {
+            shieldDuration -= Time.deltaTime;
+
+            if (shieldDuration <= 0)
+            {
+                shieldSprite.enabled = false;
+                shieldSpriteEnabled = false;
+                shieldDuration = shieldDurationRestart;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && waitForShield <= 0)
+        {
+            shieldSprite.enabled = true;
+            shieldSpriteEnabled = true;
+            waitForShield = waitForShieldRestart;
+        }
+
+        if (waitForShield > 0)
+        {
+            if (!shieldSprite.enabled)
+            {
+                waitForShield -= Time.deltaTime;
+            }
         }
 
         // Attack

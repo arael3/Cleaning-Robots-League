@@ -320,19 +320,16 @@ public class NPCController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("bomb.layer " + bomb.layer);
         if (holdBomb)
         {
             holdBombTimer -= Time.deltaTime;
             holdBombSprite.enabled = true;
-            //bomb.layer = 6;
         }
         else
         {
             // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
             holdBombTimer = restartholdBombTimer;
             holdBombSprite.enabled = false;
-            //bomb.layer = 0;
             isPassingRandom = false;
             isPassing = false;
             isShooting = false;
@@ -395,21 +392,18 @@ public class NPCController : MonoBehaviour
         if (holdBomb && (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            //bomb.GetComponent<Renderer>().enabled = false;
+            bomb.GetComponent<Renderer>().enabled = false;
             holdBombSprite.enabled = true;
             bomb.transform.position = shootingPoint.position;
-            //bomb.transform.position = gameObject.transform.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
-            Debug.Log("Trzyma bombe i co 1");
         }
-        Debug.Log("bomb.GetComponent<Rigidbody2D>().bodyType = " + bomb.GetComponent<Rigidbody2D>().bodyType);
+
         // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
         // In other words, if the NPC reached a random point, complete the task from the condition below
         if (holdBomb && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.transform.position = shootingPoint.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
-            Debug.Log("Trzyma bombe i co 2");
         }
 
         // DEFENCE ----------------------------------------
@@ -1485,8 +1479,8 @@ public class NPCController : MonoBehaviour
                 {
                     // !!! Trzeba dorobiæ tarczê dla gracza
 
-                    //if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                    if (true)
+                    if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                    //if (true)
                     {
                         enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
                         enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
