@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-    static float shootForce = 2.5f;
+    static float shootForce = 2.3f;
 
     // Update is called once per frame
     void Update()

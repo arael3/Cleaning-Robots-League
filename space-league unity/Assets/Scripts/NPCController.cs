@@ -58,9 +58,7 @@ public class NPCController : MonoBehaviour
 
     [SerializeField] GameObject attackAnimation;
 
-    [SerializeField] float moveSpeed = 7f;
-
-    [SerializeField] float shootForce = 2.5f;
+    float moveSpeed = 7f;
 
     bool ifEnemyNPCNearbyForDefence = false;
     bool ifEnemyNPCTopNearbyForDefence = false;
@@ -153,7 +151,7 @@ public class NPCController : MonoBehaviour
     float waitTimeBeforeShoot = 0.11f;
     const float waitTimeBeforeShootRestart = 0.11f;
 
-    public float holdBombTimer = 21.5f;
+    float holdBombTimer = 1.5f;
 
     public float HoldBombTimer
     {
@@ -161,7 +159,7 @@ public class NPCController : MonoBehaviour
         set { holdBombTimer = value; }
     }
 
-    public const float restartholdBombTimer = 21.5f;
+    const float restartholdBombTimer = 1.5f;
 
     float movementBlockingDuration = 0;
     float rbPositionXCopy;
@@ -175,17 +173,30 @@ public class NPCController : MonoBehaviour
     bool isShooting = false;
     bool objectToPassSelected = false;
 
-    bool ifDrawFieldPoint = true;
+    bool ifDrawFieldPointForAttack = true;
 
-    float randomX;
-    float randomY;
-    float randomXmin;
-    float randomXmax;
-    float randomYmin;
-    float randomYmax;
+    bool ifDrawFieldPointForDefence = true;
 
-    float diffX;
-    float diffY;
+    float randomXForAttack;
+    float randomYForAttack;
+    float randomXminForAttack;
+    float randomXmaxForAttack;
+    float randomYminForAttack;
+    float randomYmaxForAttack;
+
+    float randomXForDefence;
+    float randomYForDefence;
+    float randomXminForDefence;
+    float randomXmaxForDefence;
+    float randomYminForDefence;
+    float randomYmaxForDefence;
+
+    
+
+    float diffXForAttack;
+    float diffYForAttack;
+    float diffXForDefence;
+    float diffYForDefence;
 
     bool state;
     float timeBetweenStateChanging = 0;
@@ -384,14 +395,19 @@ public class NPCController : MonoBehaviour
             enemyNPCHoldBomb = false;
         }
 
-        if (ifDrawFieldPoint)
+        if (ifDrawFieldPointForAttack)
         {
-            DrawFieldPoint(out randomX, out randomY, out ifDrawFieldPoint);
+            DrawFieldPointForAttack(out randomXForAttack, out randomYForAttack, out ifDrawFieldPointForAttack);
+        }
+        
+        if (ifDrawFieldPointForDefence)
+        {
+            DrawFieldPointForDefence(out randomXForDefence, out randomYForDefence, out ifDrawFieldPointForDefence);
         }
 
         //Bomb controll when this NPC hold the bomb
         // If the NPC didn't reached a random point, disable bomb rendering and enable bomb sprite imitation inside spaceship
-        if (holdBomb && (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
+        if (holdBomb && (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             bomb.GetComponent<Renderer>().enabled = false;
@@ -402,7 +418,7 @@ public class NPCController : MonoBehaviour
 
         // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
         // In other words, if the NPC reached a random point, complete the task from the condition below
-        if (holdBomb && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
+        if (holdBomb && ((diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) && (diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
         {
             bomb.transform.position = shootingPoint.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
@@ -682,16 +698,20 @@ public class NPCController : MonoBehaviour
             ifEnemyNPCNearbyForAttack = false;
         }
 
-        diffX = Mathf.Abs(rb.position.x - randomX);
+        diffXForAttack = Mathf.Abs(rb.position.x - randomXForAttack);
 
-        diffY = Mathf.Abs(rb.position.y - randomY);
+        diffYForAttack = Mathf.Abs(rb.position.y - randomYForAttack);
 
-        //Movement when NPC hold the bomb
-        if (holdBomb && !isPassing && !isPassingRandom && (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))
+        diffXForDefence = Mathf.Abs(rb.position.x - randomXForDefence);
+
+        diffYForDefence = Mathf.Abs(rb.position.y - randomYForDefence);
+
+        //Movement when this NPC hold the bomb
+        if (holdBomb && !isPassing && !isPassingRandom && (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
         {
             state = true;
 
-            lookDir = new Vector2(randomX, randomY) - rb.position;
+            lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
             rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
 
@@ -747,13 +767,13 @@ public class NPCController : MonoBehaviour
             //TYLKO NPC BOTTOM if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
             if (ifFriendPlayerOrNPCHoldBomb)
             {
-                if (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))
+                if (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition))
                 {
                     state = true;
                     // Preventing NPCs from getting stuck to each other when moving in opposite directions. The determinant is the time (movementBlockingDuration) the NPCs stay close to each other.
                     if (movementBlockingDuration > 0.08f)
                     {
-                        lookDir = new Vector2(randomX, randomY) - rb.position;
+                        lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
                         rbPositionXCopy = rb.position.x;
                         rbPositionYCopy = rb.position.y;
@@ -782,7 +802,7 @@ public class NPCController : MonoBehaviour
                     }
                     else
                     {
-                        lookDir = new Vector2(randomX, randomY) - rb.position;
+                        lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
                         rbPositionXCopy = rb.position.x;
                         rbPositionYCopy = rb.position.y;
@@ -910,13 +930,13 @@ public class NPCController : MonoBehaviour
                     }
 
                     //Debug.Log("NPC Top is NOT closer");
-                    if (!(diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) || !(diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))
+                    if (!(diffXForDefence >= 0 && diffXForDefence <= acceptableInaccuracyOfNpcPosition) || !(diffYForDefence >= 0 && diffYForDefence <= acceptableInaccuracyOfNpcPosition))
                     {
                         state = true;
 
                         if (movementBlockingDuration > 0.08f)
                         {
-                            lookDir = new Vector2(randomX, randomY) - rb.position;
+                            lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
 
                             rbPositionXCopy = rb.position.x;
                             rbPositionYCopy = rb.position.y;
@@ -943,7 +963,7 @@ public class NPCController : MonoBehaviour
                         }
                         else
                         {
-                            lookDir = new Vector2(randomX, randomY) - rb.position;
+                            lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
 
                             rbPositionXCopy = rb.position.x;
                             rbPositionYCopy = rb.position.y;
@@ -984,7 +1004,7 @@ public class NPCController : MonoBehaviour
 
         // Aiming for the goal and shooting
         //if ((holdBomb && !isPassing && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))) || isShooting || (holdBomb && !isPassing && hit.collider.name == "GoalRight"))
-        if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition)))))
+        if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || ((diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) && (diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))))
         {
             isShooting = true;
             lookDir = (Vector2)fieldPointGoal.position - rb.position;
@@ -1002,7 +1022,8 @@ public class NPCController : MonoBehaviour
                     //bomb.layer = 0;
                     holdBomb = false;
                     isShooting = false;
-                    ifDrawFieldPoint = true;
+                    ifDrawFieldPointForAttack = true;
+                    ifDrawFieldPointForDefence = true;
                     raycastColliderName = "none";
                     waitTimeBeforeShoot = waitTimeBeforeShootRestart;
                     holdBombTimer = restartholdBombTimer;
@@ -1034,7 +1055,8 @@ public class NPCController : MonoBehaviour
                     //bomb.layer = 0;
                     holdBomb = false;
                     isPassing = false;
-                    ifDrawFieldPoint = true;
+                    ifDrawFieldPointForAttack = true;
+                    ifDrawFieldPointForDefence = true;
                     waitTimeBeforeShoot = waitTimeBeforeShootRestart;
                     holdBombTimer = restartholdBombTimer;
                     holdBombSprite.enabled = false;
@@ -1155,7 +1177,8 @@ public class NPCController : MonoBehaviour
                     //bomb.layer = 0;
                     holdBomb = false;
                     isPassingRandom = false;
-                    ifDrawFieldPoint = true;
+                    ifDrawFieldPointForAttack = true;
+                    ifDrawFieldPointForDefence= true;
                     raycastColliderName2 = "none";
                     objectToPassSelected = false;
                     waitTimeBeforeShoot = waitTimeBeforeShootRestart;
@@ -1237,57 +1260,110 @@ public class NPCController : MonoBehaviour
     }
 
     // Draw the point on the field from which the NPC will release the next shoot or will be waiting for the pass.
-    public void DrawFieldPoint(out float randomX, out float randomY, out bool ifDrawFieldPoint)
+    public void DrawFieldPointForAttack(out float randomXForAttack, out float randomYForAttack, out bool ifDrawFieldPointForAttack)
     {
         switch (gameObject.name)
         {
             case "TeamBlueNPCTop":
-                randomXmin = 7;
-                randomXmax = 11;
-                randomYmin = 1;
-                randomYmax = 6;
+                randomXminForAttack = 7;
+                randomXmaxForAttack = 11;
+                randomYminForAttack = 1;
+                randomYmaxForAttack = 6;
                 break;
             case "TeamBlueNPCMiddle":
-                randomXmin = 4;
-                randomXmax = 6;
-                randomYmin = -3;
-                randomYmax = 3;
+                randomXminForAttack = 4;
+                randomXmaxForAttack = 6;
+                randomYminForAttack = -3;
+                randomYmaxForAttack = 3;
                 break;
             case "TeamBlueNPCBottom":
-                randomXmin = 8;
-                randomXmax = 12;
-                randomYmin = -1;
-                randomYmax = -6;
+                randomXminForAttack = 8;
+                randomXmaxForAttack = 12;
+                randomYminForAttack = -1;
+                randomYmaxForAttack = -6;
                 break;
             case "TeamRedNPCTop":
-                randomXmin = -8;
-                randomXmax = -12;
-                randomYmin = 1;
-                randomYmax = 6;
+                randomXminForAttack = -8;
+                randomXmaxForAttack = -12;
+                randomYminForAttack = 1;
+                randomYmaxForAttack = 6;
                 break;
             case "TeamRedNPCMiddle":
-                randomXmin = -4;
-                randomXmax = -6;
-                randomYmin = -3;
-                randomYmax = 3;
+                randomXminForAttack = -4;
+                randomXmaxForAttack = -6;
+                randomYminForAttack = -3;
+                randomYmaxForAttack = 3;
                 break;
             case "TeamRedNPCBottom":
-                randomXmin = -7;
-                randomXmax = -11;
-                randomYmin = -1;
-                randomYmax = -6;
+                randomXminForAttack = -7;
+                randomXmaxForAttack = -11;
+                randomYminForAttack = -1;
+                randomYmaxForAttack = -6;
                 break;
             default:
-                randomXmin = -7;
-                randomXmax = 7;
-                randomYmin = -4;
-                randomYmax = 4;
+                randomXminForAttack = -7;
+                randomXmaxForAttack = 7;
+                randomYminForAttack = -4;
+                randomYmaxForAttack = 4;
                 break;
         }
 
-        randomX = Random.Range(randomXmin, randomXmin);
-        randomY = Random.Range(randomYmin, randomYmax);
-        ifDrawFieldPoint = false;
+        randomXForAttack = Random.Range(randomXminForAttack, randomXminForAttack);
+        randomYForAttack = Random.Range(randomYminForAttack, randomYmaxForAttack);
+        ifDrawFieldPointForAttack = false;
+    }
+
+    public void DrawFieldPointForDefence(out float randomXForDefence, out float randomYForDefence, out bool ifDrawFieldPointForDefence)
+    {
+        switch (gameObject.name)
+        {
+            case "TeamBlueNPCTop":
+                randomXminForDefence = -7;
+                randomXmaxForDefence = -11;
+                randomYminForDefence = 1;
+                randomYmaxForDefence = 6;
+                break;
+            case "TeamBlueNPCMiddle":
+                randomXminForDefence = -4;
+                randomXmaxForDefence = -6;
+                randomYminForDefence = -3;
+                randomYmaxForDefence = 3;
+                break;
+            case "TeamBlueNPCBottom":
+                randomXminForDefence = -8;
+                randomXmaxForDefence = -12;
+                randomYminForDefence = -1;
+                randomYmaxForDefence = -6;
+                break;
+            case "TeamRedNPCTop":
+                randomXminForDefence = 8;
+                randomXmaxForDefence = 12;
+                randomYminForDefence = 1;
+                randomYmaxForDefence = 6;
+                break;
+            case "TeamRedNPCMiddle":
+                randomXminForDefence = 4;
+                randomXmaxForDefence = 6;
+                randomYminForDefence = -3;
+                randomYmaxForDefence = 3;
+                break;
+            case "TeamRedNPCBottom":
+                randomXminForDefence = 7;
+                randomXmaxForDefence = 11;
+                randomYminForDefence = -1;
+                randomYmaxForDefence = -6;
+                break;
+            default:
+                randomXminForDefence = -7;
+                randomXmaxForDefence = 7;
+                randomYminForDefence = -4;
+                randomYmaxForDefence = 4;
+                break;
+        }
+
+        randomXForDefence = Random.Range(randomXminForDefence, randomXminForDefence);
+        randomYForDefence = Random.Range(randomYminForDefence, randomYmaxForDefence);
+        ifDrawFieldPointForDefence = false;
     }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 8f;
+    float moveSpeed = 7f;
 
     public Rigidbody2D rb;
     public Renderer holdBombSprite;
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] GameObject attackAnimation;
 
-    public Vector2 lookDir;
+    Vector2 lookDir;
 
     float shieldDuration = 1.5f;
 
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         set { holdBomb = value; }
     }
 
-    public float holdBombTimer = 1.5f;
+    float holdBombTimer = 1.5f;
 
     public float HoldBombTimer
     {

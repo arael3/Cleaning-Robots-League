@@ -785,9 +785,6 @@ MonoBehaviour:
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  moveSpeed: 9
-  shootForce: 2.5
-  holdBombTimer: 1.5
 --- !u!114 &198850107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3922,9 +3919,6 @@ MonoBehaviour:
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  moveSpeed: 9
-  shootForce: 2.5
-  holdBombTimer: 1.5
 --- !u!50 &648451356
 Rigidbody2D:
   serializedVersion: 4
@@ -4487,9 +4481,6 @@ MonoBehaviour:
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  moveSpeed: 9
-  shootForce: 2.5
-  holdBombTimer: 1.5
 --- !u!114 &756087099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13472,9 +13463,6 @@ MonoBehaviour:
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  moveSpeed: 9
-  shootForce: 2.5
-  holdBombTimer: 1.5
 --- !u!114 &1414596599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13835,7 +13823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2060d9208aab8b44791ec34860b49878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
   rb: {fileID: 1514394203}
   holdBombSprite: {fileID: 246064731}
   shootingPoint: {fileID: 1947457559}
@@ -13853,8 +13840,6 @@ MonoBehaviour:
   shootAnimation: {fileID: 8578494349851097923, guid: 331c44d9b46f5a64ca5f39e42dfd60aa, type: 3}
   enemy: {fileID: 0}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  lookDir: {x: 0, y: 0}
-  holdBombTimer: 1.5
 --- !u!50 &1514394203
 Rigidbody2D:
   serializedVersion: 4
@@ -15612,9 +15597,6 @@ MonoBehaviour:
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
   attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
-  moveSpeed: 9
-  shootForce: 2.5
-  holdBombTimer: 1.5
 --- !u!114 &1899012610
 MonoBehaviour:
   m_ObjectHideFlags: 0
