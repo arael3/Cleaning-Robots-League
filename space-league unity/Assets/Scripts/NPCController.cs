@@ -132,6 +132,8 @@ public class NPCController : MonoBehaviour
 
     float shortPauseBeforeAttackRestart = 0.06f;
 
+    int acceptableDifferenceInDistanceToBomb = 1;
+
     Vector2 lookDir;
     Vector3 vbLookDir;
 
@@ -818,118 +820,73 @@ public class NPCController : MonoBehaviour
 
                 state = true;
 
-                lookDir = (Vector2)bomb.transform.position - rb.position;
+                if (followTheBombSwitcher)
+                {
+                    followTheBombSwitcher = false;
 
-                //Debug.Log("NPCTop:  lookDir.x = " + lookDir.x + "  lookDir.y = " + lookDir.y);
+                    int friendPlayerDistanceToBomb = 9999;
+                    int friendNPCTopDistanceToBomb = 9999;
+                    int friendNPCMiddleDistanceToBomb = 9999;
+                    int friendNPCBottomDistanceToBomb = 9999;
 
-                // Nale¿y rozbudowaæ o odleg³oœci miêdzy wszystkimi poszczególnymi NPC
-                //float differenceInDistanceToTheBombBetweenNPCPlayers = Mathf.Abs((Mathf.Pow(lookDir.x, 2) + Mathf.Pow(lookDir.y, 2)) - (Mathf.Pow(NPCBottomController.lookDir.x, 2) + Mathf.Pow(NPCBottomController.lookDir.y, 2)));
-                // Lekko poprawione dzia³anie, odwo³anie z wykorzystaniem friendNPCBottom.GetComponent<NPCController>()
-                //float differenceInDistanceToTheBombBetweenNPCPlayers = Mathf.Abs((Mathf.Pow(lookDir.x, 2) + Mathf.Pow(lookDir.y, 2)) - (Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.y, 2)));
+                    int thisNPCDistanceToBomb = (int)Vector3.Distance(gameObject.transform.position, bomb.transform.position);
 
-                // Check which NPC is closer to the bomb. followTheBombSwitcher is used to prevent NPCs glitching.
-                //if ( ((Mathf.Pow(lookDir.x, 2) + Mathf.Pow(lookDir.y, 2)) <= (Mathf.Pow(NPCBottomController12.lookDir.x, 2) + Mathf.Pow(NPCBottomController12.lookDir.y, 2))) || (differenceInDistanceToTheBombBetweenNPCPlayers < 10))
+                    if (friendPlayer)
+                    {
+                        friendPlayerDistanceToBomb = (int)Vector3.Distance(friendPlayer.GetComponent<Transform>().position, bomb.transform.position);
+                    }
 
-                //// Chwilowo wy³¹czone porównywanie, który NPC jest najbli¿ej bomby. Wszystkie NPC pod¹¿aj¹ za bomb¹.
-                //if (followTheBombSwitcher)
-                //{
-                //    followTheBombSwitcher = false;
+                    if (friendNPCTop)
+                    {
+                        if (friendNPCTop.name != gameObject.name)
+                        {
+                            friendNPCTopDistanceToBomb = (int)Vector3.Distance(friendNPCTop.GetComponent<Transform>().position, bomb.transform.position);
+                        }
+                    }
 
-                //    float[] distancesToBomb = new float[3];
+                    if (friendNPCMiddle)
+                    {
+                        if (friendNPCMiddle.name != gameObject.name)
+                        {
+                            friendNPCMiddleDistanceToBomb = (int)Vector3.Distance(friendNPCMiddle.GetComponent<Transform>().position, bomb.transform.position);
+                        }
+                    }
 
-                //    float pow2DistanceToBombOfThisNPC = Mathf.Pow(lookDir.x, 2) + Mathf.Pow(lookDir.y, 2);
+                    if (friendNPCBottom)
+                    {
+                        if (friendNPCBottom.name != gameObject.name)
+                        {
+                            friendNPCBottomDistanceToBomb = (int)Vector3.Distance(friendNPCBottom.GetComponent<Transform>().position, bomb.transform.position);
+                        }
+                    }
 
-                //    float pow2DistanceToBombOfNPCTop;
-                //    float pow2DistanceToBombOfPlayer;
-                //    float pow2DistanceToBombOfNPCMiddle;
-                //    float pow2DistanceToBombOfNPCBottom;
+                    int[] teammatesDistancesToBomb = { friendPlayerDistanceToBomb, friendNPCTopDistanceToBomb, friendNPCMiddleDistanceToBomb, friendNPCBottomDistanceToBomb };
 
-                //    //float pow2DistanceToBombOfNPCBottom = Mathf.Pow(NPCBottomController.lookDir.x, 2) + Mathf.Pow(NPCBottomController.lookDir.y, 2);
-
-                //    // Checking distance to bomb of others teammates
-                //    if (team)
-                //    {
-                //        if (gameObject.name != "TeamRedNPCTop")
-                //        {
-                //            pow2DistanceToBombOfNPCTop = Mathf.Pow(friendNPCTop.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCTop.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[0] = pow2DistanceToBombOfNPCTop;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (gameObject.name != "TeamBlueNPCTop")
-                //        {
-                //            pow2DistanceToBombOfNPCTop = Mathf.Pow(friendNPCTop.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCTop.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[0] = pow2DistanceToBombOfNPCTop;
-                //        }
-                //    }
-
-                //    if (team)
-                //    {
-                //        if (gameObject.name != "TeamRedNPCMiddle")
-                //        {
-                //            pow2DistanceToBombOfNPCMiddle = Mathf.Pow(friendNPCMiddle.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCMiddle.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[1] = pow2DistanceToBombOfNPCMiddle;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (gameMode == "BluePlayer vs NPC")
-                //        {
-                //            pow2DistanceToBombOfPlayer = Mathf.Pow(friendPlayer.GetComponent<PlayerController>().lookDir.x, 2) + Mathf.Pow(friendPlayer.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[1] = pow2DistanceToBombOfPlayer;
-                //        }
-                //        // Nale¿y uzupe³niæ inne tryby gry
-                //        else
-                //        {
-                //            if (gameObject.name != "TeamBlueNPCMiddle")
-                //            {
-                //                pow2DistanceToBombOfNPCMiddle = Mathf.Pow(friendNPCMiddle.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCMiddle.GetComponent<NPCController>().lookDir.y, 2);
-                //                distancesToBomb[1] = pow2DistanceToBombOfNPCMiddle;
-                //            }
-                //        }
-                //    }
-
-                //    if (team)
-                //    {
-                //        if (gameObject.name != "TeamRedNPCBottom")
-                //        {
-                //            pow2DistanceToBombOfNPCBottom = Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[2] = pow2DistanceToBombOfNPCBottom;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (gameObject.name != "TeamBlueNPCBottom")
-                //        {
-                //            pow2DistanceToBombOfNPCBottom = Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.x, 2) + Mathf.Pow(friendNPCBottom.GetComponent<NPCController>().lookDir.y, 2);
-                //            distancesToBomb[2] = pow2DistanceToBombOfNPCBottom;
-                //        }
-                //    }
-
-                //    // Designating teammate closest to the bomb
-                //    float minDistanceOfOtherTeamMates = distancesToBomb.Min();
-
-                //    if ((pow2DistanceToBombOfThisNPC <= minDistanceOfOtherTeamMates) || (differenceInDistanceToTheBombBetweenNPCPlayers < 2))
-                //    {
-                //        followTheBomb = true;
-                //    }
-                //    else
-                //    {
-                //        followTheBomb = false;
-                //    }
-                //}
-
+                    // The NPC closest to the bomb will follow the bomb. 
+                    // If the difference in distance to the bomb between two NPCs is less than the acceptableDifferenceInDistanceToBomb, the NPC also follows the bomb.
+                    if ((thisNPCDistanceToBomb - acceptableDifferenceInDistanceToBomb) < teammatesDistancesToBomb.Min())
+                    {
+                        followTheBomb = true;
+                    }
+                    else
+                    {
+                        followTheBomb = false;
+                    }
+                }
+               
                 // If this NPC is closer to the bomb, go for bomb
                 if (followTheBomb)
                 {
                     ifClosserToBombTimer += Time.deltaTime;
 
-                    if (ifClosserToBombTimer > 0.2f)
+                    // ifClosserToBombTimer is used to prevent NPCs glitching. Thus, the above checking which NPC is closer will be executed when the ifClosserToBombTimer exceeds the set time.
+                    if (ifClosserToBombTimer > 0.6f)
                     {
                         followTheBombSwitcher = true;
                         ifClosserToBombTimer = 0;
                     }
+
+                    lookDir = (Vector2)bomb.transform.position - rb.position;
 
                     //Debug.Log("NPC Top is closer");
 
@@ -941,12 +898,12 @@ public class NPCController : MonoBehaviour
                     Aiming(angle);
 
                 }
-                // If NPC Bottom is closer to the bomb, go to random field point
+                // If other NPC is closer to the bomb, go to random field point
                 else
                 {
                     ifFurtherToBombTimer += Time.deltaTime;
 
-                    if (ifFurtherToBombTimer > 0.2f)
+                    if (ifFurtherToBombTimer > 0.6f)
                     {
                         followTheBombSwitcher = true;
                         ifFurtherToBombTimer = 0;
