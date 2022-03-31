@@ -269,7 +269,7 @@ public class PlayerController : MonoBehaviour
                 shieldDuration = shieldDurationRestart;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.E) && waitForShield <= 0)
+        else if (Input.GetButtonDown("Fire2") && waitForShield <= 0)
         {
             shieldSprite.enabled = true;
             shieldSpriteEnabled = true;

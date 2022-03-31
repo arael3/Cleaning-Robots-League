@@ -193,10 +193,13 @@ public class NPCController : MonoBehaviour
 
     
 
-    float diffXForAttack;
-    float diffYForAttack;
-    float diffXForDefence;
-    float diffYForDefence;
+    float diffForAttack;
+    float diffForDefence;
+
+    //float diffXForAttack;
+    //float diffYForAttack;
+    //float diffXForDefence;
+    //float diffYForDefence;
 
     bool state;
     float timeBetweenStateChanging = 0;
@@ -407,7 +410,7 @@ public class NPCController : MonoBehaviour
 
         //Bomb controll when this NPC hold the bomb
         // If the NPC didn't reached a random point, disable bomb rendering and enable bomb sprite imitation inside spaceship
-        if (holdBomb && (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
+        if (holdBomb && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
         {
             bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             bomb.GetComponent<Renderer>().enabled = false;
@@ -418,7 +421,7 @@ public class NPCController : MonoBehaviour
 
         // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
         // In other words, if the NPC reached a random point, complete the task from the condition below
-        if (holdBomb && ((diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) && (diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
+        if (holdBomb && (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
         {
             bomb.transform.position = shootingPoint.position;
             bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
@@ -454,7 +457,7 @@ public class NPCController : MonoBehaviour
         Attack();
 
         // NPC passes bomb after button pressing
-        if (Input.GetButtonDown("Fire2") && holdBomb && !isShooting && !isPassingRandom)
+        if (Input.GetKeyDown(KeyCode.E) && holdBomb && !isShooting && !isPassingRandom)
         {
             isPassing = true;
         }
@@ -698,16 +701,20 @@ public class NPCController : MonoBehaviour
             ifEnemyNPCNearbyForAttack = false;
         }
 
-        diffXForAttack = Mathf.Abs(rb.position.x - randomXForAttack);
+        diffForAttack = Vector2.Distance(rb.position, new Vector2(randomXForAttack, randomYForAttack));
 
-        diffYForAttack = Mathf.Abs(rb.position.y - randomYForAttack);
+        diffForDefence = Vector2.Distance(rb.position, new Vector2(randomXForDefence, randomYForDefence));
 
-        diffXForDefence = Mathf.Abs(rb.position.x - randomXForDefence);
+        //diffXForAttack = Mathf.Abs(rb.position.x - randomXForAttack);
 
-        diffYForDefence = Mathf.Abs(rb.position.y - randomYForDefence);
+        //diffYForAttack = Mathf.Abs(rb.position.y - randomYForAttack);
+
+        //diffXForDefence = Mathf.Abs(rb.position.x - randomXForDefence);
+
+        //diffYForDefence = Mathf.Abs(rb.position.y - randomYForDefence);
 
         //Movement when this NPC hold the bomb
-        if (holdBomb && !isPassing && !isPassingRandom && (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))
+        if (holdBomb && !isPassing && !isPassingRandom && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
         {
             state = true;
 
@@ -767,7 +774,7 @@ public class NPCController : MonoBehaviour
             //TYLKO NPC BOTTOM if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
             if (ifFriendPlayerOrNPCHoldBomb)
             {
-                if (!(diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) || !(diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition))
+                if (!(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
                 {
                     state = true;
                     // Preventing NPCs from getting stuck to each other when moving in opposite directions. The determinant is the time (movementBlockingDuration) the NPCs stay close to each other.
@@ -887,16 +894,23 @@ public class NPCController : MonoBehaviour
                     if ((thisNPCDistanceToBomb - acceptableDifferenceInDistanceToBomb) < teammatesDistancesToBomb.Min())
                     {
                         followTheBomb = true;
+                        //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
                     }
                     else
                     {
                         followTheBomb = false;
+                        //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
                     }
                 }
                
                 // If this NPC is closer to the bomb, go for bomb
                 if (followTheBomb)
                 {
+                    if (gameObject.name == "TeamRedNPCBottom")
+                    {
+                        //Debug.Log(gameObject.name + ": go to bomb");
+                    }
+
                     ifClosserToBombTimer += Time.deltaTime;
 
                     // ifClosserToBombTimer is used to prevent NPCs glitching. Thus, the above checking which NPC is closer will be executed when the ifClosserToBombTimer exceeds the set time.
@@ -921,6 +935,11 @@ public class NPCController : MonoBehaviour
                 // If other NPC is closer to the bomb, go to random field point
                 else
                 {
+                    if (gameObject.name == "TeamRedNPCBottom")
+                    {
+                        //Debug.Log(gameObject.name + ": go to point");
+                    }
+
                     ifFurtherToBombTimer += Time.deltaTime;
 
                     if (ifFurtherToBombTimer > 0.6f)
@@ -929,8 +948,13 @@ public class NPCController : MonoBehaviour
                         ifFurtherToBombTimer = 0;
                     }
 
-                    //Debug.Log("NPC Top is NOT closer");
-                    if (!(diffXForDefence >= 0 && diffXForDefence <= acceptableInaccuracyOfNpcPosition) || !(diffYForDefence >= 0 && diffYForDefence <= acceptableInaccuracyOfNpcPosition))
+                    // If the distance to the point is greater than the set value, the NPC moves to the point.
+                    // When the distance to a point is less than the set value (when the NPC reaches the point), its velocity is set to zero to prevent glitching.
+
+                    // The glitch is that when the NPC reaches the point, it has some velocity which causes the NPC to move for a while longer,
+                    // which causes the NPC to move away from the point, which again requires a return to the point and add a little bit of velocity.
+                    // This situation loops, causing unwanted NPC vibrations. That's why, in else statement below___ rb.velocity = new Vector2(0, 0); ___was used.
+                    if (diffForDefence > 0.1f)
                     {
                         state = true;
 
@@ -963,6 +987,11 @@ public class NPCController : MonoBehaviour
                         }
                         else
                         {
+                            if (gameObject.name == "TeamBlueNPCTop")
+                            {
+                                Debug.Log(gameObject.name + ": go to point");
+                            }
+
                             lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
 
                             rbPositionXCopy = rb.position.x;
@@ -984,10 +1013,15 @@ public class NPCController : MonoBehaviour
                             movementBlockingDuration += Time.deltaTime;
                         }
                     }
+                    else
+                    {
+                        rb.velocity = new Vector2(0, 0);
+                    }
                 }
             }
         }
 
+        // To raczej nie dzia³a :(
         // If state if changing to often (unwanted NPC vibrations) reduce the velocity of NPC to prevent unwanted NPC vibrations
         if (state)
         {
@@ -995,16 +1029,17 @@ public class NPCController : MonoBehaviour
         }
         else
         {
-            if ((timeBetweenStateChanging > 0) && (timeBetweenStateChanging < 0.1f))
+            if ((0 < timeBetweenStateChanging) && (timeBetweenStateChanging < 0.1f))
             {
                 rb.velocity = new Vector2(0, 0);
+                //Debug.Log(gameObject.name + ": state changing to often");
             }
             timeBetweenStateChanging = 0;
         }
 
         // Aiming for the goal and shooting
         //if ((holdBomb && !isPassing && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))) || isShooting || (holdBomb && !isPassing && hit.collider.name == "GoalRight"))
-        if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || ((diffXForAttack >= 0 && diffXForAttack <= acceptableInaccuracyOfNpcPosition) && (diffYForAttack >= 0 && diffYForAttack <= acceptableInaccuracyOfNpcPosition)))))
+        if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))))
         {
             isShooting = true;
             lookDir = (Vector2)fieldPointGoal.position - rb.position;
