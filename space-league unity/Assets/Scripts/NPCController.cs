@@ -720,7 +720,7 @@ public class NPCController : MonoBehaviour
 
             lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
-            rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+            Movement(lookDir);
 
             angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
@@ -814,7 +814,7 @@ public class NPCController : MonoBehaviour
                         rbPositionXCopy = rb.position.x;
                         rbPositionYCopy = rb.position.y;
 
-                        rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+                        Movement(lookDir);
 
                         angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
@@ -925,7 +925,7 @@ public class NPCController : MonoBehaviour
                     //Debug.Log("NPC Top is closer");
 
                     //rb.MovePosition(rb.position + lookDir.normalized * moveSpeed * Time.deltaTime);
-                    rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+                    Movement(lookDir);
 
                     angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
@@ -997,7 +997,7 @@ public class NPCController : MonoBehaviour
                             rbPositionXCopy = rb.position.x;
                             rbPositionYCopy = rb.position.y;
 
-                            rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+                            Movement(lookDir);
 
                             angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
@@ -1229,6 +1229,11 @@ public class NPCController : MonoBehaviour
         }
         //Debug.Log("holdBomb: " + holdBomb + "  isPassingRandom: " + isPassingRandom + "  objectToPassSelected: " + objectToPassSelected);
         //Debug.Log("vbRotationZ = " + vbRotationZ + "  vbAngle = " + vbAngle);
+    }
+
+    void Movement(Vector2 lookDir)
+    {
+        rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
     }
 
     public Vector3 StartingPosition(GameObject gameObject)
