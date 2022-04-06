@@ -777,57 +777,26 @@ public class NPCController : MonoBehaviour
                 if (!(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
                 {
                     state = true;
-                    // Preventing NPCs from getting stuck to each other when moving in opposite directions. The determinant is the time (movementBlockingDuration) the NPCs stay close to each other.
-                    if (movementBlockingDuration > 0.08f)
-                    {
-                        lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
-                        rbPositionXCopy = rb.position.x;
-                        rbPositionYCopy = rb.position.y;
+                    lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
-                        //Debug.Log("NPC Top Mathf.Abs(rb.rotation) = " + Mathf.Abs(rb.rotation));
-                        if (Mathf.Abs(rb.rotation) <= 90)
-                        {
-                            rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x - 1.2f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y + 1.5f) * moveSpeed * Time.deltaTime)));
-                        }
-                        else
-                        {
-                            rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x + 1.6f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y - 1.3f) * moveSpeed * Time.deltaTime)));
-                        }
+                    rbPositionXCopy = rb.position.x;
+                    rbPositionYCopy = rb.position.y;
 
-                        angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+                    Movement(lookDir);
 
-                        Aiming(angle);
+                    angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
-                        //if ((enemyDistanceX >= 1.5f) || (enemyDistanceY >= 1.5f))
-                        //if ((enemyNPCTopDistanceX >= 1.5f) || (enemyNPCTopDistanceY >= 1.5f))
-                        //if (enemyNPCTopDistance >= 1.5f)
-                        if (!ifEnemyNPCNearbyForMovementBlocking)
-                        {
-                            movementBlockingDuration = 0;
-                        }
-                    }
-                    else
-                    {
-                        lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
+                    Aiming(angle);
 
-                        rbPositionXCopy = rb.position.x;
-                        rbPositionYCopy = rb.position.y;
-
-                        Movement(lookDir);
-
-                        angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-                        Aiming(angle);
-                    }
                     // Start timing the time when the enemy is nearby
-                    //if (((enemyDistanceX < 1.7f) && (enemyDistanceY < 1.7f)) || ((Mathf.Abs(playerDistance.x) < 1.7f) && (Mathf.Abs(playerDistance.y) < 1.7f)))
-                    //if (((enemyNPCTopDistanceX < 1.7f) && (enemyNPCTopDistanceY < 1.7f)) || ((Mathf.Abs(playerDistance.x) < 1.7f) && (Mathf.Abs(playerDistance.y) < 1.7f)))
-                    //if (enemyNPCTopDistance < 1.7f || ((Mathf.Abs(playerDistance.x) < 1.7f) && (Mathf.Abs(playerDistance.y) < 1.7f)))
-                    //if (ifEnemyNPCNearbyForMovementBlocking || ((Mathf.Abs(playerDistance.x) < 1.7f) && (Mathf.Abs(playerDistance.y) < 1.7f)))
                     if (ifEnemyNPCNearbyForMovementBlocking)
                     {
                         movementBlockingDuration += Time.deltaTime;
+                    }
+                    else
+                    {
+                        movementBlockingDuration = 0;
                     }
                 }
                 else
@@ -958,59 +927,25 @@ public class NPCController : MonoBehaviour
                     {
                         state = true;
 
-                        if (movementBlockingDuration > 0.08f)
-                        {
-                            lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
+                        lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
 
-                            rbPositionXCopy = rb.position.x;
-                            rbPositionYCopy = rb.position.y;
+                        rbPositionXCopy = rb.position.x;
+                        rbPositionYCopy = rb.position.y;
 
-                            if (Mathf.Abs(transform.rotation.z) <= 90)
-                            {
-                                rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x - 1.0f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y + 1.2f) * moveSpeed * Time.deltaTime)));
-                            }
-                            else
-                            {
-                                rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x + 1.2f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y - 1.0f) * moveSpeed * Time.deltaTime)));
-                            }
+                        Movement(lookDir);
 
-                            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+                        angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
 
-                            Aiming(angle);
+                        Aiming(angle);
 
-                            //if ((enemyDistanceX >= 1.5f) || (enemyDistanceY >= 1.5f))
-                            //if ((enemyNPCTopDistanceX >= 1.5f) || (enemyNPCTopDistanceY >= 1.5f))
-                            if (!ifEnemyNPCNearbyForMovementBlocking)
-                            {
-                                movementBlockingDuration = 0;
-                            }
-                        }
-                        else
-                        {
-                            if (gameObject.name == "TeamBlueNPCTop")
-                            {
-                                Debug.Log(gameObject.name + ": go to point");
-                            }
-
-                            lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
-
-                            rbPositionXCopy = rb.position.x;
-                            rbPositionYCopy = rb.position.y;
-
-                            Movement(lookDir);
-
-                            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-                            Aiming(angle);
-                        }
-
-                        //if (((enemyDistanceX < 1.5f) && (enemyDistanceY < 1.5f)) || ((Mathf.Abs(playerDistance.x) < 1.5f) && (Mathf.Abs(playerDistance.y) < 1.5f)))
-                        //if (((enemyNPCTopDistanceX < 1.5f) && (enemyNPCTopDistanceY < 1.5f)) || ((Mathf.Abs(playerDistance.x) < 1.5f) && (Mathf.Abs(playerDistance.y) < 1.5f)))
-                        //if (enemyNPCTopDistance < 1.5f || ((Mathf.Abs(playerDistance.x) < 1.5f) && (Mathf.Abs(playerDistance.y) < 1.5f)))
-                        //if (ifEnemyNPCNearbyForMovementBlocking || ((Mathf.Abs(playerDistance.x) < 1.5f) && (Mathf.Abs(playerDistance.y) < 1.5f)))
+                        // Start timing the time when the enemy is nearby
                         if (ifEnemyNPCNearbyForMovementBlocking)
                         {
                             movementBlockingDuration += Time.deltaTime;
+                        }
+                        else
+                        {
+                            movementBlockingDuration = 0;
                         }
                     }
                     else
@@ -1233,7 +1168,23 @@ public class NPCController : MonoBehaviour
 
     void Movement(Vector2 lookDir)
     {
-        rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+        if (movementBlockingDuration < 0.08f)
+        {
+            rb.MovePosition(new Vector2((rb.position.x + lookDir.normalized.x * moveSpeed * Time.deltaTime), (rb.position.y + lookDir.normalized.y * moveSpeed * Time.deltaTime)));
+        }
+        // Preventing NPCs from getting stuck to each other when moving in opposite directions. The determinant is the time (movementBlockingDuration) the NPCs stay close to each other.
+        else
+        {
+            if (Mathf.Abs(rb.rotation) <= 90)
+            {
+                rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x - 1.2f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y + 1.5f) * moveSpeed * Time.deltaTime)));
+            }
+            else
+            {
+                rb.MovePosition(new Vector2((rb.position.x + (lookDir.normalized.x + 1.6f) * moveSpeed * Time.deltaTime), (rb.position.y + (lookDir.normalized.y - 1.3f) * moveSpeed * Time.deltaTime)));
+            }
+        }
+        
     }
 
     public Vector3 StartingPosition(GameObject gameObject)
