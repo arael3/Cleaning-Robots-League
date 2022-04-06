@@ -1484,9 +1484,7 @@ public class NPCController : MonoBehaviour
                     {
                         if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
                         {
-                            enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
+                            SuccessfulAttack(enemyNPCTop);
                         }
                     }
                 }
@@ -1497,9 +1495,7 @@ public class NPCController : MonoBehaviour
                     {
                         if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
                         {
-                            enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
+                            SuccessfulAttack(enemyNPCMiddle);
                         }
                     }
                 }
@@ -1523,9 +1519,7 @@ public class NPCController : MonoBehaviour
                     {
                         if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
                         {
-                            enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
+                            SuccessfulAttack(enemyNPCBottom);
                         }
                     }
                 }
@@ -1543,6 +1537,16 @@ public class NPCController : MonoBehaviour
                 waitForAttack -= Time.deltaTime;
             }
         }
+    }
+
+    void SuccessfulAttack(GameObject enemyNPC)
+    {
+        enemyNPC.GetComponent<NPCController>().HoldBomb = false;
+        enemyNPC.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+        enemyNPC.GetComponent<NPCController>().isShooting = false;
+        enemyNPC.GetComponent<NPCController>().ifDrawFieldPointForAttack = true;
+        enemyNPC.GetComponent<NPCController>().ifDrawFieldPointForDefence = true;
+        HoldBomb = true;
     }
 
 }
