@@ -17,11 +17,14 @@ public class HoldBombTimerCanvas : MonoBehaviour
 
     Text holdBombTimer;
 
+    Slider holdBombTimerBar;
+
     float hBtimer;
     // Start is called before the first frame update
     void Start()
     {
         holdBombTimer = GetComponent<Text>();
+        //holdBombTimerBar = GetComponent<Slider>();
     }
 
     // Update is called once per frame
@@ -70,5 +73,7 @@ public class HoldBombTimerCanvas : MonoBehaviour
         }
 
         holdBombTimer.text = hBtimer.ToString();
+        
+        //holdBombTimerBar.value = hBtimer / PlayerController.restartholdBombTimer;
     }
 }

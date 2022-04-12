@@ -61,9 +61,9 @@ public class PlayerController : MonoBehaviour
 
     float shieldDurationRestart = 1.5f;
 
-    float waitForShield = 0f;
+    public float waitForShield = 0f;
 
-    float waitForShieldRestart = 1.8f;
+    public const float waitForShieldRestart = 1.8f;
 
     bool shieldSpriteEnabled;
     public bool ShieldSpriteEnabled
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
         set { holdBombTimer = value; }
     }
 
-    const float restartholdBombTimer = 1.5f;
+    public const float restartholdBombTimer = 1.5f;
 
     private void Start()
     {
