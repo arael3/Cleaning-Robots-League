@@ -80,9 +80,9 @@ public class PlayerController : MonoBehaviour
 
     float attackDurationRestart = 1.15f;
 
-    float waitForAttack = 0f;
+    public float waitForAttack = 0f;
 
-    float waitForAttackRestart = 1.5f;
+    public const float waitForAttackRestart = 1.5f;
 
     float shortPauseBeforeAttack = 0.06f;
 
