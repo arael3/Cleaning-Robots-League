@@ -1448,81 +1448,28 @@ public class NPCController : MonoBehaviour
                 attackDuration = attackDurationRestart;
             }
         }
-        //else if (EnNPCTopController.holdBomb && (waitForAttack <= 0) && (enemyDistanceX < 2.0f) && (enemyDistanceY < 2.0f))
-        //else if (enemyNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyNPCTopDistanceX < 2.0f) && (enemyNPCTopDistanceY < 2.0f))
-        //else if (enemyNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && enemyNPCTopDistance < 2.0f)
         else if (ifEnemyNPCNearbyForAttack && waitForAttack <= 0)
         {
-            shortPauseBeforeAttack -= Time.deltaTime;
-            //Debug.Log("shortPauseBeforeAttack " + shortPauseBeforeAttack);
+            // Proste przejêcie - spróbowaæ ustawiæ przejêcie gdy Raycast trafi przeciwnika
 
-            if (shortPauseBeforeAttack <= 0)
+            if (ifEnemyNPCTopNearbyForAttack)
             {
-                //atackSprite.enabled = true;
-                duringAttack = true;
-                waitForAttack = waitForAttackRestart;
-                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+                AttackFinalization(enemyNPCTop);
+            }
 
-                GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
+            if (ifEnemyNPCMiddleNearbyForAttack)
+            {
+                AttackFinalization(enemyNPCMiddle);
+            }
 
-                attackAnimationInst.transform.parent = gameObject.transform;
+            if (ifEnemyPlayerNearbyForAttack)
+            {
+                AttackFinalization(enemyPlayer);
+            }
 
-                SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
-
-                if (attackAnimationSprite)
-                {
-                    attackAnimationSprite.sortingOrder = 2;
-                }
-
-                Destroy(attackAnimationInst, .4f);
-
-                // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
-
-                if (ifEnemyNPCTopNearbyForAttack)
-                {
-                    if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
-                    {
-                        if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
-                        {
-                            SuccessfulAttack(enemyNPCTop);
-                        }
-                    }
-                }
-
-                if (ifEnemyNPCMiddleNearbyForAttack)
-                {
-                    if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
-                    {
-                        if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
-                        {
-                            SuccessfulAttack(enemyNPCMiddle);
-                        }
-                    }
-                }
-
-                if (ifEnemyPlayerNearbyForAttack)
-                {
-                    if (enemyPlayer.GetComponent<PlayerController>().HoldBomb)
-                    {
-                        if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                        {
-                            enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
-                            enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
-                        }
-                    }
-                }
-
-                if (ifEnemyNPCBottomNearbyForAttack)
-                {
-                    if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
-                    {
-                        if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
-                        {
-                            SuccessfulAttack(enemyNPCBottom);
-                        }
-                    }
-                }
+            if (ifEnemyNPCBottomNearbyForAttack)
+            {
+                AttackFinalization(enemyNPCBottom);
             }
         }
         else
@@ -1539,14 +1486,102 @@ public class NPCController : MonoBehaviour
         }
     }
 
-    void SuccessfulAttack(GameObject enemyNPC)
+    void AttackFinalization(GameObject enemy)
     {
-        enemyNPC.GetComponent<NPCController>().HoldBomb = false;
-        enemyNPC.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-        enemyNPC.GetComponent<NPCController>().isShooting = false;
-        enemyNPC.GetComponent<NPCController>().ifDrawFieldPointForAttack = true;
-        enemyNPC.GetComponent<NPCController>().ifDrawFieldPointForDefence = true;
-        HoldBomb = true;
+        // Checking if the enemy is NPC or player. If NPC use GetComponent<NPCController>(), else player use GetComponent<PlayerController>()
+        if (enemy.GetComponent<NPCController>())
+        {
+            if (enemy.GetComponent<NPCController>().HoldBomb)
+            {
+                if (!enemy.GetComponent<NPCController>().ShieldSpriteEnabled)
+                {
+                    if (shortPauseBeforeAttack <= 0)
+                    {
+                        //atackSprite.enabled = true;
+                        duringAttack = true;
+                        waitForAttack = waitForAttackRestart;
+                        shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+
+                        GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
+
+                        attackAnimationInst.transform.parent = gameObject.transform;
+
+                        SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
+
+                        if (attackAnimationSprite)
+                        {
+                            attackAnimationSprite.sortingOrder = 2;
+                        }
+
+                        Destroy(attackAnimationInst, .4f);
+
+                        enemy.GetComponent<NPCController>().HoldBomb = false;
+                        enemy.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                        enemy.GetComponent<NPCController>().isShooting = false;
+                        enemy.GetComponent<NPCController>().ifDrawFieldPointForAttack = true;
+                        enemy.GetComponent<NPCController>().ifDrawFieldPointForDefence = true;
+                        HoldBomb = true;
+                    }
+                    else
+                    {
+                        shortPauseBeforeAttack -= Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+                }
+            }
+            else
+            {
+                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+            }
+        }
+        else
+        {
+            if (enemy.GetComponent<PlayerController>().HoldBomb)
+            {
+                if (!enemy.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                {
+                    if (shortPauseBeforeAttack <= 0)
+                    {
+                        //atackSprite.enabled = true;
+                        duringAttack = true;
+                        waitForAttack = waitForAttackRestart;
+                        shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+
+                        GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
+
+                        attackAnimationInst.transform.parent = gameObject.transform;
+
+                        SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
+
+                        if (attackAnimationSprite)
+                        {
+                            attackAnimationSprite.sortingOrder = 2;
+                        }
+
+                        Destroy(attackAnimationInst, .4f);
+
+                        enemy.GetComponent<PlayerController>().HoldBomb = false;
+                        enemy.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                        HoldBomb = true;
+                    }
+                    else
+                    {
+                        shortPauseBeforeAttack -= Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+                }
+            }
+            else
+            {
+                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+            }
+        }
     }
 
 }
