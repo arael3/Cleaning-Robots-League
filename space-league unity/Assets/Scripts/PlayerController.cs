@@ -115,8 +115,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        //transform.position = new Vector3(-3.0f, 0f, 0f);
-        transform.position = new Vector3(0f, 0f, 0f);
+        transform.position = new Vector3(-3.0f, 0f, 0f);
+        //transform.position = new Vector3(0f, 0f, 0f);
 
         // Finding which team the NPC belongs to
         if (gameObject.name == "TeamBluePlayer")

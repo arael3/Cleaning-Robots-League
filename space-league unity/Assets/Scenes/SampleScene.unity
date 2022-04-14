@@ -945,7 +945,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!1 &213258769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,8 +1232,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1809,8 +1809,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4087,7 +4087,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!4 &648451357
 Transform:
   m_ObjectHideFlags: 0
@@ -4592,8 +4592,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4752,7 +4752,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!1 &759100713
 GameObject:
   m_ObjectHideFlags: 0
@@ -5569,8 +5569,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5813,8 +5813,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6391,7 +6391,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 06ef823817726224aab748fb8e7708d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13718,8 +13718,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3c322a3a5987a3e4ca21d326cf3c1a16, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -14151,7 +14151,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!4 &1414596602
 Transform:
   m_ObjectHideFlags: 0
@@ -16445,7 +16445,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!4 &1899012613
 Transform:
   m_ObjectHideFlags: 0
