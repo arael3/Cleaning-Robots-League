@@ -896,7 +896,7 @@ MonoBehaviour:
   teamRedNPCBottom: {fileID: 1899012606}
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
-  attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
+  attackAnimation: {fileID: 423591991920137865, guid: 066c26814a8696d479b9e4697f62d5ec, type: 3}
 --- !u!114 &198850107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4703,7 +4703,7 @@ MonoBehaviour:
   teamRedNPCBottom: {fileID: 1899012606}
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
-  attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
+  attackAnimation: {fileID: 423591991920137865, guid: 066c26814a8696d479b9e4697f62d5ec, type: 3}
 --- !u!114 &756087099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16396,7 +16396,7 @@ MonoBehaviour:
   teamRedNPCBottom: {fileID: 0}
   fieldPointRightGoal: {fileID: 1988131894}
   fieldPointLeftGoal: {fileID: 450624230}
-  attackAnimation: {fileID: 5496698429582436032, guid: 243d616dee982a24297c7546d5c500c5, type: 3}
+  attackAnimation: {fileID: 423591991920137865, guid: 066c26814a8696d479b9e4697f62d5ec, type: 3}
 --- !u!114 &1899012610
 MonoBehaviour:
   m_ObjectHideFlags: 0
