@@ -19,6 +19,8 @@ public class Shooting : MonoBehaviour
 
         bombRef.GetComponent<Rigidbody2D>().AddForce(bombRef.transform.right * shootForce, ForceMode2D.Impulse);
 
+        FindObjectOfType<AudioManager>().Play("Shoot");
+
         Bomb.onGround = true;
     }
 }

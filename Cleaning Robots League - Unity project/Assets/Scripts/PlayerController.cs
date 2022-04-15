@@ -273,6 +273,7 @@ public class PlayerController : MonoBehaviour
         {
             shieldSprite.enabled = true;
             shieldSpriteEnabled = true;
+            FindObjectOfType<AudioManager>().Play("Shield");
             waitForShield = waitForShieldRestart;
         }
 
@@ -322,6 +323,14 @@ public class PlayerController : MonoBehaviour
                 }
 
                 Destroy(attackAnimationInst, .4f);
+
+                int randomAttackSoundNumber = Random.Range(1, 2);
+
+                // Play random attack sound when attack
+                if (randomAttackSoundNumber == 1)
+                    FindObjectOfType<AudioManager>().Play("Attack1");
+                else
+                    FindObjectOfType<AudioManager>().Play("Attack2");
 
                 // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
                 //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)

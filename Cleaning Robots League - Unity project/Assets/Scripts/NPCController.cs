@@ -443,6 +443,7 @@ public class NPCController : MonoBehaviour
         {
             shieldSprite.enabled = true;
             shieldSpriteEnabled = true;
+            FindObjectOfType<AudioManager>().Play("Shield");
             waitForShield = waitForShieldRestart;
         }
 
@@ -1514,6 +1515,14 @@ public class NPCController : MonoBehaviour
                         }
 
                         Destroy(attackAnimationInst, .4f);
+
+                        int randomAttackSoundNumber = Random.Range(1, 2);
+
+                        // Play random attack sound when attack
+                        if (randomAttackSoundNumber == 1)
+                            FindObjectOfType<AudioManager>().Play("Attack1");
+                        else
+                            FindObjectOfType<AudioManager>().Play("Attack2");
 
                         enemy.GetComponent<NPCController>().HoldBomb = false;
                         enemy.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
