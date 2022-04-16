@@ -254,7 +254,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 57ffabe656033e34194fc2ec391cdeb2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6cbf8edc6917f1b4caab78790f83d944, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -627,6 +627,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7251368299789673133, guid: c68c90df89c68c04fa90035096254006, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ca50ea6782104c44e97b1e53b27a8b47, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c68c90df89c68c04fa90035096254006, type: 3}
 --- !u!1 &165685773
@@ -703,7 +707,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e50fed8913ea52e44b469210640b1768, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6cc2c90e7451b1c4ab2e10a9b26fb796, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1016,8 +1020,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 3a6c56f7860dc7649b56a7642b6e318b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1233,7 +1237,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1501,8 +1505,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: b852ead4b0923894185780665b3a86ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1810,7 +1814,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3907,7 +3911,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: efe89e8ff6db8c541a090f25111c7bb4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c923de97a8e0a3e4b8986d3a052d95f2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4226,8 +4230,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: b852ead4b0923894185780665b3a86ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4584,7 +4588,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5561,7 +5565,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5805,7 +5809,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5872,8 +5876,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 3a6c56f7860dc7649b56a7642b6e318b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6123,7 +6127,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 80260dc5264612248a10497e6cf2b55d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ed4dadb1a2187fb47b5231c125bfc27e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -13710,7 +13714,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f389cd1b7483faf4d95f4a3a3351b0c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29c54f20ae7d3ed438f42105700db349, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -13985,8 +13989,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: b852ead4b0923894185780665b3a86ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -16302,7 +16306,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 4924b9071cd9031448224c84962e4596, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 972ae6a3aa5393a40bb2538e882839d1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -17005,7 +17009,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: bef1e11bb22cbbe4680f2f79b5985893, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3179a74be276a854b95b389f7e66cc04, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -17200,13 +17204,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 41ffa8bb6b3e5194bb036f271e8eea8f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 3a6c56f7860dc7649b56a7642b6e318b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.8, y: 1.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -17748,6 +17752,18 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
+      propertyPath: sounds.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6e64165529168f04c94ddd49a2b2ed73, type: 3}
+    - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
+      propertyPath: sounds.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 494a41f47087a07449e43b8c50f5fda8, type: 3}
+    - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
+      propertyPath: sounds.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7c041405bf613fc4db5870fe9085a6d5, type: 3}
+    - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
       propertyPath: sounds.Array.data[3].clip
       value: 
       objectReference: {fileID: 8300000, guid: cb3104dde95b07f43817344e8fa62dc7, type: 3}
@@ -17769,11 +17785,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
       propertyPath: sounds.Array.data[1].spatialBlend
-      value: 0.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
       propertyPath: sounds.Array.data[2].spatialBlend
-      value: 0.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1646343224123659945, guid: e6a4b503b57f7874fa3950355cf77723, type: 3}
       propertyPath: sounds.Array.data[3].spatialBlend
