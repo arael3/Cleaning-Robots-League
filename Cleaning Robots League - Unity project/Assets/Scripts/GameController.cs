@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Time.timeScale = 0;
+        //SceneManager.LoadScene("Menu");
     }
 
     // Update is called once per frame
@@ -23,7 +25,7 @@ public class GameController : MonoBehaviour
         {
             if (GameMenus.ifPause)
             {
-                PauseMenu.Resume();
+                PauseMenu.ResumeMatch();
             }
             else
             {

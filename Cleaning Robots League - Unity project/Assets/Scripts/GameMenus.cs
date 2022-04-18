@@ -18,11 +18,11 @@ public class GameMenus : MonoBehaviour
         if (ifPause)
         {
             GameScreenTitle.text = "PAUSE";
-            resumeButton.SetActive(true);
         }
         else
         {
             GameScreenTitle.text = "GAME OVER";
+            resumeButton.SetActive(false);
         }
 
         gameObject.SetActive(true);
@@ -38,22 +38,21 @@ public class GameMenus : MonoBehaviour
         }
     }
 
-    public void Resume()
+    public void ResumeMatch()
     {
         if (MatchTime.matchDuration > 0)
         {
             gameObject.SetActive(false);
-            resumeButton.SetActive(false);
             Time.timeScale = 1;
             ifPause = false;
         }
     }
-    public void Start()
+    public void StartMatch()
     {
-        //SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Game");
     }
 
-    public void Restart()
+    public void RestartMatch()
     {
         MatchTime.matchDuration = 300;
         Score.teamBlueScore = 0;
@@ -64,7 +63,7 @@ public class GameMenus : MonoBehaviour
         Time.timeScale = 1;
         ifPause = false;
     }
-    public void Exit()
+    public void ExitGame()
     {
         Application.Quit();
     }
