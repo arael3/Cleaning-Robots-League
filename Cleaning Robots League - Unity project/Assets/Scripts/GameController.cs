@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public GameScreen GameScreen;
+    public GameMenus PauseMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,17 +17,17 @@ public class GameController : MonoBehaviour
         if (MatchTime.matchDuration <= 0)
         {
             Time.timeScale = 0;
-            GameScreen.Setup(false);
+            PauseMenu.Setup(false);
         }
         if (Input.GetButtonDown("Cancel"))
         {
-            if (GameScreen.ifPause)
+            if (GameMenus.ifPause)
             {
-                GameScreen.ResumeButton();
+                PauseMenu.Resume();
             }
             else
             {
-                GameScreen.GamePause();
+                PauseMenu.GamePause();
             }
         }
     }

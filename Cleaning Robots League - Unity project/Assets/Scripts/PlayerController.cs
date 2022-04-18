@@ -207,14 +207,14 @@ public class PlayerController : MonoBehaviour
 
         if (movement.x != 0 || movement.y != 0)
         {
-            if (!FindObjectOfType<AudioManager>().isPlaying("Blue-Player-Moving"))
+            if (!FindObjectOfType<AudioManager>().isPlaying("P1Moving"))
             {
-                FindObjectOfType<AudioManager>().Play("Blue-Player-Moving");
+                FindObjectOfType<AudioManager>().Play("P1Moving");
             }
         }
         else
         {
-            FindObjectOfType<AudioManager>().Stop("Blue-Player-Moving");
+            FindObjectOfType<AudioManager>().Stop("P1Moving");
         }
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
