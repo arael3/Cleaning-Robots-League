@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Cleaning Robots League - Unity project/Assets/Audio/moving-t.wav.meta
 guid: 1ff071c8df018e746be3143beb624f31
+=======
+guid: 7c041405bf613fc4db5870fe9085a6d5
+>>>>>>> f15a0d774d5a4339681b33135e5b8eda8c93112d:Cleaning Robots League - Unity project/Assets/Audio/attack2.wav.meta
 AudioImporter:
   externalObjects: {}
   serializedVersion: 6
