@@ -202,7 +202,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
+        
         movement.y = Input.GetAxisRaw("Vertical");
+
+        if (movement.x != 0 || movement.y != 0)
+        {
+            if (!FindObjectOfType<AudioManager>().isPlaying("P1Moving"))
+            {
+                FindObjectOfType<AudioManager>().Play("P1Moving");
+            }
+        }
+        else
+        {
+            FindObjectOfType<AudioManager>().Stop("P1Moving");
+        }
 
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -324,7 +337,7 @@ public class PlayerController : MonoBehaviour
 
                 Destroy(attackAnimationInst, .4f);
 
-                int randomAttackSoundNumber = Random.Range(1, 2);
+                int randomAttackSoundNumber = Random.Range(1, 3);
 
                 // Play random attack sound when attack
                 if (randomAttackSoundNumber == 1)
