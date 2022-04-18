@@ -324,7 +324,7 @@ public class PlayerController : MonoBehaviour
 
                 Destroy(attackAnimationInst, .4f);
 
-                int randomAttackSoundNumber = Random.Range(1, 2);
+                int randomAttackSoundNumber = Random.Range(1, 3);
 
                 // Play random attack sound when attack
                 if (randomAttackSoundNumber == 1)

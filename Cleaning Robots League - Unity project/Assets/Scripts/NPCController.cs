@@ -1516,7 +1516,7 @@ public class NPCController : MonoBehaviour
 
                         Destroy(attackAnimationInst, .4f);
 
-                        int randomAttackSoundNumber = Random.Range(1, 2);
+                        int randomAttackSoundNumber = Random.Range(1, 3);
 
                         // Play random attack sound when attack
                         if (randomAttackSoundNumber == 1)
@@ -1571,6 +1571,14 @@ public class NPCController : MonoBehaviour
                         }
 
                         Destroy(attackAnimationInst, .4f);
+
+                        int randomAttackSoundNumber = Random.Range(1, 3);
+
+                        // Play random attack sound when attack
+                        if (randomAttackSoundNumber == 1)
+                            FindObjectOfType<AudioManager>().Play("Attack1");
+                        else
+                            FindObjectOfType<AudioManager>().Play("Attack2");
 
                         enemy.GetComponent<PlayerController>().HoldBomb = false;
                         enemy.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
