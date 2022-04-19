@@ -16,6 +16,9 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject teamRedNPCMiddle;
     [SerializeField] GameObject teamRedNPCBottom;
 
+    public static int teamBlueScore = 0;
+    public static int teamRedScore = 0;
+
     public static bool onGround = true;
 
     bool ifAnyPlayerOrNPCHoldBomb = false;
@@ -81,14 +84,14 @@ public class Bomb : MonoBehaviour
         if (collisionObjectTag == "GoalRight")
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
-            Score.teamBlueScore += 1;
+            teamBlueScore += 1;
             gameObject.transform.position = new Vector3(0f, 0f, 0f);
 
         }
         else if (collisionObjectTag == "GoalLeft")
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            Score.teamRedScore += 1;
+            teamRedScore += 1;
             gameObject.transform.position = new Vector3(0f, 0f, 0f);
 
         }

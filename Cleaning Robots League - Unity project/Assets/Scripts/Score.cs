@@ -5,19 +5,15 @@ using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    public static int teamBlueScore = 0;
-    public static int teamRedScore = 0;
     Text score;
     
-    // Start is called before the first frame update
     void Start()
     {
         score = GetComponent<Text>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        score.text = teamBlueScore + " : " + teamRedScore;
+        score.text = Bomb.teamBlueScore + " : " + Bomb.teamRedScore;
     }
 }

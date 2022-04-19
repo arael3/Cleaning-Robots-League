@@ -7,11 +7,32 @@ using TMPro;
 
 public class GameMenus : MonoBehaviour
 {
+    [SerializeField] GameObject startButton;
     [SerializeField] GameObject resumeButton;
+    [SerializeField] GameObject matchStartsIn;
+    
+
+    [SerializeField] GameObject timeBeforeMatchStarts;
+    TimeBeforeMatchStarts timeBeforeMatchStartsScript;
+
+    [SerializeField] GameObject score;
+    [SerializeField] GameObject restart;
+    [SerializeField] GameObject exit;
 
     [SerializeField] TextMeshProUGUI GameScreenTitle;
 
+    [HideInInspector]
+    public bool ifStart = false;
+
     public static bool ifPause = false;
+
+    private void Start()
+    {
+        if (timeBeforeMatchStarts)
+        {
+            timeBeforeMatchStartsScript = timeBeforeMatchStarts.GetComponent<TimeBeforeMatchStarts>();
+        }
+    }
 
     public void Setup(bool ifPause)
     {
@@ -47,22 +68,74 @@ public class GameMenus : MonoBehaviour
             ifPause = false;
         }
     }
-    public void StartMatch()
+    
+    public void StartCounting()
     {
-        SceneManager.LoadScene("Game");
+        ifStart = true;
+        matchStartsIn.SetActive(true);
+        timeBeforeMatchStarts.SetActive(true);
+
+        if (resumeButton)
+        {
+            resumeButton.SetActive(false);
+        }
+        if (score)
+        {
+            score.SetActive(false);
+        }
+        if (restart)
+        {
+            restart.SetActive(false);
+        }
+        
+        exit.SetActive(false);
+
+        Time.timeScale = 1;
+    }
+
+    public void HideStartButton()
+    {
+        startButton.SetActive(false);
     }
 
     public void RestartMatch()
     {
         MatchTime.matchDuration = 300;
-        Score.teamBlueScore = 0;
-        Score.teamBlueScore = 0;
+        Bomb.teamBlueScore = 0;
+        Bomb.teamRedScore = 0;
         SceneManager.LoadScene("Game");
         gameObject.SetActive(false);
-        resumeButton.SetActive(false);
         Time.timeScale = 1;
         ifPause = false;
     }
+
+    float time = 3.99f;
+    public void CountingDownAndStartMatch()
+    {
+        
+
+        if (time > 1.1f)
+        {
+            time -= Time.deltaTime;
+            timeBeforeMatchStartsScript.Time = (int)time;
+            //Debug.Log("time = " + time);
+        }
+        else
+        {
+            MatchTime.matchDuration = 300;
+            Bomb.teamBlueScore = 0;
+            Bomb.teamRedScore = 0;
+            SceneManager.LoadScene("Game");
+
+            ifPause = false;
+            ifStart = false;
+
+            //gameObject.SetActive(false);
+
+            time = 3.99f;
+        }
+    }
+
     public void ExitGame()
     {
         Application.Quit();

@@ -201,311 +201,315 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        
-        movement.y = Input.GetAxisRaw("Vertical");
-
-        if (movement.x != 0 || movement.y != 0)
+        if (!GameMenus.ifPause)
         {
-            if (!FindObjectOfType<AudioManager>().isPlaying("P1Moving"))
+            movement.x = Input.GetAxisRaw("Horizontal");
+
+            movement.y = Input.GetAxisRaw("Vertical");
+
+            if (movement.x != 0 || movement.y != 0)
             {
-                FindObjectOfType<AudioManager>().Play("P1Moving");
+                if (!FindObjectOfType<AudioManager>().isPlaying("P1Moving"))
+                {
+                    FindObjectOfType<AudioManager>().Play("P1Moving");
+                }
             }
-        }
-        else
-        {
-            FindObjectOfType<AudioManager>().Stop("P1Moving");
-        }
+            else
+            {
+                FindObjectOfType<AudioManager>().Stop("P1Moving");
+            }
 
-        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+            mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        if (holdBomb)
-        {
-            holdBombTimer -= Time.deltaTime;
-            bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            bomb.GetComponent<Renderer>().enabled = false;
-            holdBombSprite.enabled = true;
-            bomb.transform.position = shootingPoint.position;
-            bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
-        }
-        else
-        {
-            // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
-            holdBombTimer = restartholdBombTimer;
-            holdBombSprite.enabled = false;
-        }
-
-        if (Input.GetButtonDown("Fire1") && !GameScreen.ifPause)
-        {
             if (holdBomb)
             {
-                waitForShoot = true;
-
-                GameObject shootAnimInst = Instantiate(shootAnimation, transform.position, transform.rotation);
-                shootAnimInst.transform.parent = gameObject.transform;
-                SpriteRenderer shootAnimInstSprite = shootAnimInst.GetComponent<SpriteRenderer>();
-                if (shootAnimInstSprite)
-                {
-                    shootAnimInstSprite.sortingOrder = 2;
-                }
-                Destroy(shootAnimInst, .4f);
+                holdBombTimer -= Time.deltaTime;
+                bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                bomb.GetComponent<Renderer>().enabled = false;
+                holdBombSprite.enabled = true;
+                bomb.transform.position = shootingPoint.position;
+                bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
             }
-        }
-
-        if (waitForShoot)
-        {
-            timeForShipAnimation += Time.deltaTime;
-
-            if (timeForShipAnimation >= .05f)
+            else
             {
-                Shooting.Shoot(bomb);
-                //bomb.layer = 0;
-                holdBomb = false;
+                // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
                 holdBombTimer = restartholdBombTimer;
                 holdBombSprite.enabled = false;
-
-                waitForShoot = false;
-                timeForShipAnimation = 0;
             }
 
-        }
-
-        // DEFENCE ----------------------------------------
-        if (shieldSprite.enabled)
-        {
-            shieldDuration -= Time.deltaTime;
-
-            if (shieldDuration <= 0)
+            if (Input.GetButtonDown("Fire1") && !GameMenus.ifPause)
             {
-                shieldSprite.enabled = false;
-                shieldSpriteEnabled = false;
-                shieldDuration = shieldDurationRestart;
-            }
-        }
-        else if (Input.GetButtonDown("Fire2") && waitForShield <= 0)
-        {
-            shieldSprite.enabled = true;
-            shieldSpriteEnabled = true;
-            FindObjectOfType<AudioManager>().Play("Shield");
-            waitForShield = waitForShieldRestart;
-        }
-
-        if (waitForShield > 0)
-        {
-            if (!shieldSprite.enabled)
-            {
-                waitForShield -= Time.deltaTime;
-            }
-        }
-
-        // Attack
-        if (duringAttack)
-        {
-            attackDuration -= Time.deltaTime;
-
-            if (attackDuration <= 0)
-            {
-                //atackSprite.enabled = false;
-                duringAttack = false;
-                attackDuration = attackDurationRestart;
-            }
-        }
-        //else if (TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyDistanceX < 2) && (enemyDistanceY < 2))
-        else if ((Input.GetKeyDown(KeyCode.Space) && waitForAttack <= 0) || beforeAttack)
-        {
-            beforeAttack = true;
-            shortPauseBeforeAttack -= Time.deltaTime;
-            //Debug.Log("shortPauseBeforeAttack " + shortPauseBeforeAttack);
-
-            if (shortPauseBeforeAttack <= 0)
-            {
-                //atackSprite.enabled = true;
-                duringAttack = true;
-                waitForAttack = waitForAttackRestart;
-                beforeAttack = false;
-
-                GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
-
-                attackAnimationInst.transform.parent = gameObject.transform;
-
-                SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
-
-                if (attackAnimationSprite)
+                if (holdBomb)
                 {
-                    attackAnimationSprite.sortingOrder = 2;
+                    waitForShoot = true;
+
+                    GameObject shootAnimInst = Instantiate(shootAnimation, transform.position, transform.rotation);
+                    shootAnimInst.transform.parent = gameObject.transform;
+                    SpriteRenderer shootAnimInstSprite = shootAnimInst.GetComponent<SpriteRenderer>();
+                    if (shootAnimInstSprite)
+                    {
+                        shootAnimInstSprite.sortingOrder = 2;
+                    }
+                    Destroy(shootAnimInst, .4f);
+                }
+            }
+
+            if (waitForShoot)
+            {
+                timeForShipAnimation += Time.deltaTime;
+
+                if (timeForShipAnimation >= .05f)
+                {
+                    Shooting.Shoot(bomb);
+                    //bomb.layer = 0;
+                    holdBomb = false;
+                    holdBombTimer = restartholdBombTimer;
+                    holdBombSprite.enabled = false;
+
+                    waitForShoot = false;
+                    timeForShipAnimation = 0;
                 }
 
-                Destroy(attackAnimationInst, .4f);
+            }
 
-                int randomAttackSoundNumber = Random.Range(1, 3);
+            // DEFENCE ----------------------------------------
+            if (shieldSprite.enabled)
+            {
+                shieldDuration -= Time.deltaTime;
 
-                // Play random attack sound when attack
-                if (randomAttackSoundNumber == 1)
-                    FindObjectOfType<AudioManager>().Play("Attack1");
-                else
-                    FindObjectOfType<AudioManager>().Play("Attack2");
-
-                // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
-                //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)
-                //{
-                //    TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb = false;
-                //    holdBomb = true;
-                //}
-
-
-                if (ifEnemyNPCTopNearbyForAttack)
+                if (shieldDuration <= 0)
                 {
-                    if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
+                    shieldSprite.enabled = false;
+                    shieldSpriteEnabled = false;
+                    shieldDuration = shieldDurationRestart;
+                }
+            }
+            else if (Input.GetButtonDown("Fire2") && waitForShield <= 0)
+            {
+                shieldSprite.enabled = true;
+                shieldSpriteEnabled = true;
+                FindObjectOfType<AudioManager>().Play("Shield");
+                waitForShield = waitForShieldRestart;
+            }
+
+            if (waitForShield > 0)
+            {
+                if (!shieldSprite.enabled)
+                {
+                    waitForShield -= Time.deltaTime;
+                }
+            }
+
+            // Attack
+            if (duringAttack)
+            {
+                attackDuration -= Time.deltaTime;
+
+                if (attackDuration <= 0)
+                {
+                    //atackSprite.enabled = false;
+                    duringAttack = false;
+                    attackDuration = attackDurationRestart;
+                }
+            }
+            //else if (TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb && (waitForAttack <= 0) && (enemyDistanceX < 2) && (enemyDistanceY < 2))
+            else if ((Input.GetKeyDown(KeyCode.Space) && waitForAttack <= 0) || beforeAttack)
+            {
+                beforeAttack = true;
+                shortPauseBeforeAttack -= Time.deltaTime;
+                //Debug.Log("shortPauseBeforeAttack " + shortPauseBeforeAttack);
+
+                if (shortPauseBeforeAttack <= 0)
+                {
+                    //atackSprite.enabled = true;
+                    duringAttack = true;
+                    waitForAttack = waitForAttackRestart;
+                    beforeAttack = false;
+
+                    GameObject attackAnimationInst = Instantiate(attackAnimation, transform.position, transform.rotation);
+
+                    attackAnimationInst.transform.parent = gameObject.transform;
+
+                    SpriteRenderer attackAnimationSprite = attackAnimationInst.GetComponent<SpriteRenderer>();
+
+                    if (attackAnimationSprite)
                     {
-                        if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                        attackAnimationSprite.sortingOrder = 2;
+                    }
+
+                    Destroy(attackAnimationInst, .4f);
+
+                    int randomAttackSoundNumber = Random.Range(1, 3);
+
+                    // Play random attack sound when attack
+                    if (randomAttackSoundNumber == 1)
+                        FindObjectOfType<AudioManager>().Play("Attack1");
+                    else
+                        FindObjectOfType<AudioManager>().Play("Attack2");
+
+                    // Testowe przejêcie - faktyczne przejêcie tylko wtedy gdy Raycast trafi przeciwnika
+                    //if (!TeamRedNPCTop.GetComponent<EnNPCTopController>().ShieldSpriteEnabled)
+                    //{
+                    //    TeamRedNPCTop.GetComponent<EnNPCTopController>().HoldBomb = false;
+                    //    holdBomb = true;
+                    //}
+
+
+                    if (ifEnemyNPCTopNearbyForAttack)
+                    {
+                        if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
                         {
-                            enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
+                            if (!enemyNPCTop.GetComponent<NPCController>().ShieldSpriteEnabled)
+                            {
+                                enemyNPCTop.GetComponent<NPCController>().HoldBomb = false;
+                                enemyNPCTop.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                                HoldBomb = true;
+                            }
+                        }
+                    }
+
+                    if (ifEnemyNPCMiddleNearbyForAttack)
+                    {
+                        if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
+                        {
+                            if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
+                            {
+                                enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
+                                enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                                HoldBomb = true;
+                            }
+                        }
+                    }
+
+                    if (ifEnemyPlayerNearbyForAttack)
+                    {
+                        if (enemyPlayer.GetComponent<PlayerController>().HoldBomb)
+                        {
+                            if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
+                            {
+                                enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
+                                enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
+                                HoldBomb = true;
+                            }
+                        }
+                    }
+
+                    if (ifEnemyNPCBottomNearbyForAttack)
+                    {
+                        if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
+                        {
+                            if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
+                            {
+                                enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
+                                enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
+                                HoldBomb = true;
+                            }
                         }
                     }
                 }
-
-                if (ifEnemyNPCMiddleNearbyForAttack)
-                {
-                    if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
-                    {
-                        if (!enemyNPCMiddle.GetComponent<NPCController>().ShieldSpriteEnabled)
-                        {
-                            enemyNPCMiddle.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCMiddle.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
-                        }
-                    }
-                }
-
-                if (ifEnemyPlayerNearbyForAttack)
-                {
-                    if (enemyPlayer.GetComponent<PlayerController>().HoldBomb)
-                    {
-                        if (!enemyPlayer.GetComponent<PlayerController>().ShieldSpriteEnabled)
-                        {
-                            enemyPlayer.GetComponent<PlayerController>().HoldBomb = false;
-                            enemyPlayer.GetComponent<PlayerController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
-                        }
-                    }
-                }
-
-                if (ifEnemyNPCBottomNearbyForAttack)
-                {
-                    if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
-                    {
-                        if (!enemyNPCBottom.GetComponent<NPCController>().ShieldSpriteEnabled)
-                        {
-                            enemyNPCBottom.GetComponent<NPCController>().HoldBomb = false;
-                            enemyNPCBottom.GetComponent<NPCController>().HoldBombTimer = restartholdBombTimer;
-                            HoldBomb = true;
-                        }
-                    }
-                }
             }
-        }
-        else
-        {
-            shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
-        }
-
-        if (waitForAttack > 0)
-        {
-            if (!duringAttack)
+            else
             {
-                waitForAttack -= Time.deltaTime;
+                shortPauseBeforeAttack = shortPauseBeforeAttackRestart;
+            }
+
+            if (waitForAttack > 0)
+            {
+                if (!duringAttack)
+                {
+                    waitForAttack -= Time.deltaTime;
+                }
             }
         }
-
     }
 
     void FixedUpdate()
     {
-        // Behavior when an enemy player is nearby.
-        //enemyDistanceX = Mathf.Abs(rb.position.x - enemy.position.x);
-        //enemyDistanceY = Mathf.Abs(rb.position.y - enemy.position.y);
-
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-        
-        //cam.transform.position = rb.position;
-        
-        lookDir = mousePos - rb.position;
-
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-        rb.rotation = angle;
-
-
-        // Behavior when an enemy player is nearby.
-        if (enemyNPCTop)
+        if (!GameMenus.ifPause)
         {
-            enemyNPCTopDistance = Vector2.Distance(rb.position, enemyNPCTop.GetComponent<Rigidbody2D>().position);
+            // Behavior when an enemy player is nearby.
+            //enemyDistanceX = Mathf.Abs(rb.position.x - enemy.position.x);
+            //enemyDistanceY = Mathf.Abs(rb.position.y - enemy.position.y);
 
-            if (enemyNPCTop.GetComponent<NPCController>().HoldBomb && enemyNPCTopDistance < minimumDistanceForAttackActivate)
+            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+
+            //cam.transform.position = rb.position;
+
+            lookDir = mousePos - rb.position;
+
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+            rb.rotation = angle;
+
+
+            // Behavior when an enemy player is nearby.
+            if (enemyNPCTop)
             {
-                ifEnemyNPCTopNearbyForAttack = true;
+                enemyNPCTopDistance = Vector2.Distance(rb.position, enemyNPCTop.GetComponent<Rigidbody2D>().position);
+
+                if (enemyNPCTop.GetComponent<NPCController>().HoldBomb && enemyNPCTopDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCTopNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCTopNearbyForAttack = false;
+                }
+
+            }
+
+            if (enemyNPCMiddle)
+            {
+
+                enemyNPCMiddleDistance = Vector2.Distance(rb.position, enemyNPCMiddle.GetComponent<Rigidbody2D>().position);
+
+                if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb && enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCMiddleNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCMiddleNearbyForAttack = false;
+                }
+            }
+
+            if (enemyPlayer)
+            {
+
+                enemyPlayerDistance = Vector2.Distance(rb.position, enemyPlayer.GetComponent<Rigidbody2D>().position);
+
+                if (enemyPlayer.GetComponent<PlayerController>().HoldBomb && enemyPlayerDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyPlayerNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyPlayerNearbyForAttack = false;
+                }
+            }
+
+            if (enemyNPCBottom)
+            {
+                enemyNPCBottomDistance = Vector2.Distance(rb.position, enemyNPCBottom.GetComponent<Rigidbody2D>().position);
+
+                if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb && enemyNPCBottomDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCBottomNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCBottomNearbyForAttack = false;
+                }
+            }
+
+            if (ifEnemyNPCTopNearbyForAttack || ifEnemyNPCMiddleNearbyForAttack || ifEnemyPlayerNearbyForAttack || ifEnemyNPCBottomNearbyForAttack)
+            {
+                ifEnemyNPCNearbyForAttack = true;
             }
             else
             {
-                ifEnemyNPCTopNearbyForAttack = false;
-            }
-
-        }
-
-        if (enemyNPCMiddle)
-        {
-
-            enemyNPCMiddleDistance = Vector2.Distance(rb.position, enemyNPCMiddle.GetComponent<Rigidbody2D>().position);
-
-            if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb && enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyNPCMiddleNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyNPCMiddleNearbyForAttack = false;
+                ifEnemyNPCNearbyForAttack = false;
             }
         }
-
-        if (enemyPlayer)
-        {
-
-            enemyPlayerDistance = Vector2.Distance(rb.position, enemyPlayer.GetComponent<Rigidbody2D>().position);
-
-            if (enemyPlayer.GetComponent<PlayerController>().HoldBomb && enemyPlayerDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyPlayerNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyPlayerNearbyForAttack = false;
-            }
-        }
-
-        if (enemyNPCBottom)
-        {
-            enemyNPCBottomDistance = Vector2.Distance(rb.position, enemyNPCBottom.GetComponent<Rigidbody2D>().position);
-
-            if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb && enemyNPCBottomDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyNPCBottomNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyNPCBottomNearbyForAttack = false;
-            }
-        }
-
-        if (ifEnemyNPCTopNearbyForAttack || ifEnemyNPCMiddleNearbyForAttack || ifEnemyPlayerNearbyForAttack || ifEnemyNPCBottomNearbyForAttack)
-        {
-            ifEnemyNPCNearbyForAttack = true;
-        }
-        else
-        {
-            ifEnemyNPCNearbyForAttack = false;
-        }
-
     }
 }

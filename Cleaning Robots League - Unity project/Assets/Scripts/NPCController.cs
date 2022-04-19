@@ -336,599 +336,455 @@ public class NPCController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (holdBomb)
+        if (!GameMenus.ifPause)
         {
-            holdBombTimer -= Time.deltaTime;
-            holdBombSprite.enabled = true;
-        }
-        else
-        {
-            // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
-            holdBombTimer = restartholdBombTimer;
-            holdBombSprite.enabled = false;
-            isPassingRandom = false;
-            isPassing = false;
-            isShooting = false;
-            objectToPassSelected = false;
-            waitTimeBeforeShoot = waitTimeBeforeShootRestart;
-        }
-
-        if (enemyNPCTop)
-        {
-            if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
+            if (holdBomb)
             {
-                enemyNPCTopHoldBomb = true;
+                holdBombTimer -= Time.deltaTime;
+                holdBombSprite.enabled = true;
             }
             else
             {
-                enemyNPCTopHoldBomb = false;
+                // Spróbowaæ dodaæ poni¿sze zmienne do instrukcji warunkowej, po udanym ataku przeciwnika
+                holdBombTimer = restartholdBombTimer;
+                holdBombSprite.enabled = false;
+                isPassingRandom = false;
+                isPassing = false;
+                isShooting = false;
+                objectToPassSelected = false;
+                waitTimeBeforeShoot = waitTimeBeforeShootRestart;
             }
-        }
 
-        if (enemyNPCMiddle)
-        {
-            if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
+            if (enemyNPCTop)
             {
-                enemyNPCMiddleHoldBomb = true;
+                if (enemyNPCTop.GetComponent<NPCController>().HoldBomb)
+                {
+                    enemyNPCTopHoldBomb = true;
+                }
+                else
+                {
+                    enemyNPCTopHoldBomb = false;
+                }
+            }
+
+            if (enemyNPCMiddle)
+            {
+                if (enemyNPCMiddle.GetComponent<NPCController>().HoldBomb)
+                {
+                    enemyNPCMiddleHoldBomb = true;
+                }
+                else
+                {
+                    enemyNPCMiddleHoldBomb = false;
+                }
+            }
+
+            if (enemyNPCBottom)
+            {
+                if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
+                {
+                    enemyNPCBottomHoldBomb = true;
+                }
+                else
+                {
+                    enemyNPCBottomHoldBomb = false;
+                }
+            }
+
+            if (enemyNPCTopHoldBomb || enemyNPCMiddleHoldBomb || enemyNPCBottomHoldBomb)
+            {
+                enemyNPCHoldBomb = true;
             }
             else
             {
-                enemyNPCMiddleHoldBomb = false;
+                enemyNPCHoldBomb = false;
             }
-        }
 
-        if (enemyNPCBottom)
-        {
-            if (enemyNPCBottom.GetComponent<NPCController>().HoldBomb)
+            if (ifDrawFieldPointForAttack)
             {
-                enemyNPCBottomHoldBomb = true;
+                DrawFieldPointForAttack(out randomXForAttack, out randomYForAttack, out ifDrawFieldPointForAttack);
             }
-            else
+
+            if (ifDrawFieldPointForDefence)
             {
-                enemyNPCBottomHoldBomb = false;
+                DrawFieldPointForDefence(out randomXForDefence, out randomYForDefence, out ifDrawFieldPointForDefence);
             }
-        }
 
-        if (enemyNPCTopHoldBomb || enemyNPCMiddleHoldBomb || enemyNPCBottomHoldBomb)
-        {
-            enemyNPCHoldBomb = true;
-        }
-        else
-        {
-            enemyNPCHoldBomb = false;
-        }
-
-        if (ifDrawFieldPointForAttack)
-        {
-            DrawFieldPointForAttack(out randomXForAttack, out randomYForAttack, out ifDrawFieldPointForAttack);
-        }
-        
-        if (ifDrawFieldPointForDefence)
-        {
-            DrawFieldPointForDefence(out randomXForDefence, out randomYForDefence, out ifDrawFieldPointForDefence);
-        }
-
-        //Bomb controll when this NPC hold the bomb
-        // If the NPC didn't reached a random point, disable bomb rendering and enable bomb sprite imitation inside spaceship
-        if (holdBomb && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
-        {
-            bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            bomb.GetComponent<Renderer>().enabled = false;
-            holdBombSprite.enabled = true;
-            bomb.transform.position = shootingPoint.position;
-            bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
-        }
-
-        // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
-        // In other words, if the NPC reached a random point, complete the task from the condition below
-        if (holdBomb && (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
-        {
-            bomb.transform.position = shootingPoint.position;
-            bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
-        }
-
-        // DEFENCE ----------------------------------------
-        if (shieldSprite.enabled)
-        {
-            shieldDuration -= Time.deltaTime;
-
-            if (shieldDuration <= 0)
+            //Bomb controll when this NPC hold the bomb
+            // If the NPC didn't reached a random point, disable bomb rendering and enable bomb sprite imitation inside spaceship
+            if (holdBomb && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
             {
-                shieldSprite.enabled = false;
-                shieldSpriteEnabled = false;
-                shieldDuration = shieldDurationRestart;
+                bomb.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                bomb.GetComponent<Renderer>().enabled = false;
+                holdBombSprite.enabled = true;
+                bomb.transform.position = shootingPoint.position;
+                bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
             }
-        }
-        else if (holdBomb && waitForShield <= 0 && ifEnemyNPCNearbyForDefence)
-        {
-            shieldSprite.enabled = true;
-            shieldSpriteEnabled = true;
-            FindObjectOfType<AudioManager>().Play("Shield");
-            waitForShield = waitForShieldRestart;
-        }
 
-        if (waitForShield > 0)
-        {
-            if (!shieldSprite.enabled)
+            // If the distance between the NPC and the random point is between 0 and acceptableInaccuracyOfNpcPosition, set the bomb to position shootingPoint.position.
+            // In other words, if the NPC reached a random point, complete the task from the condition below
+            if (holdBomb && (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
             {
-                waitForShield -= Time.deltaTime;
+                bomb.transform.position = shootingPoint.position;
+                bomb.transform.rotation = Quaternion.Euler(0f, 0f, gameObject.transform.eulerAngles.z);
             }
-        }
 
-        Attack();
+            // DEFENCE ----------------------------------------
+            if (shieldSprite.enabled)
+            {
+                shieldDuration -= Time.deltaTime;
 
-        // NPC passes bomb after button pressing
-        if (Input.GetKeyDown(KeyCode.E) && holdBomb && !isShooting && !isPassingRandom)
-        {
-            isPassing = true;
-        }
+                if (shieldDuration <= 0)
+                {
+                    shieldSprite.enabled = false;
+                    shieldSpriteEnabled = false;
+                    shieldDuration = shieldDurationRestart;
+                }
+            }
+            else if (holdBomb && waitForShield <= 0 && ifEnemyNPCNearbyForDefence)
+            {
+                shieldSprite.enabled = true;
+                shieldSpriteEnabled = true;
+                FindObjectOfType<AudioManager>().Play("Shield");
+                waitForShield = waitForShieldRestart;
+            }
 
-        // NPC passes bomb if holdBombTimer < 0
-        if ((holdBombTimer < 0) && holdBomb && !isShooting && !isPassing)
-        {
-            isPassingRandom = true;
-        }
+            if (waitForShield > 0)
+            {
+                if (!shieldSprite.enabled)
+                {
+                    waitForShield -= Time.deltaTime;
+                }
+            }
 
-        // NPC passes bomb if enemy nearby and waitForShield > 0
-        if (ifEnemyNPCNearbyForPassingRandom && !isShooting && !isPassing && (waitForShield > 0) && !shieldSprite.enabled)
-        {
-            isPassingRandom = true;
-        }
+            Attack();
 
-        if (ifEnemyNPCNearbyForPassingRandom && !isShooting && !isPassing && shieldSpriteEnabled)
-        {
-            isPassingRandom = true;
-        }
+            // NPC passes bomb after button pressing
+            if (Input.GetKeyDown(KeyCode.E) && holdBomb && !isShooting && !isPassingRandom)
+            {
+                isPassing = true;
+            }
+
+            // NPC passes bomb if holdBombTimer < 0
+            if ((holdBombTimer < 0) && holdBomb && !isShooting && !isPassing)
+            {
+                isPassingRandom = true;
+            }
+
+            // NPC passes bomb if enemy nearby and waitForShield > 0
+            if (ifEnemyNPCNearbyForPassingRandom && !isShooting && !isPassing && (waitForShield > 0) && !shieldSprite.enabled)
+            {
+                isPassingRandom = true;
+            }
+
+            if (ifEnemyNPCNearbyForPassingRandom && !isShooting && !isPassing && shieldSpriteEnabled)
+            {
+                isPassingRandom = true;
+            }
+        }  
     }
 
     void FixedUpdate()
     {
-
-        //Vector3 playerPosition = friendPlayer.GetComponent<Transform>().position;
-        //Vector3 playerDistance = transform.position - playerPosition;
-
-        RaycastHit2D hit = Physics2D.Raycast(raycastPoint.position, transform.TransformDirection(Vector2.right), 50f);
-
-        if (hit)
-        {
-            raycastColliderName = hit.collider.name;
-        }
-
-        Debug.DrawRay(raycastPoint.position, transform.TransformDirection(Vector2.right) * 50f, Color.red);
-
-        Debug.DrawRay(vbRaycastPoint.position, vbRaycastPoint.TransformDirection(Vector2.right) * 50f, Color.green);
-
-        // Behavior when an enemy player is nearby.
-        if (enemyNPCTop)
-        {
-            enemyNPCTopDistance = Vector2.Distance(rb.position, enemyNPCTop.GetComponent<Rigidbody2D>().position);
-
-            if (holdBomb && enemyNPCTopDistance < minimumDistanceForShieldActivate)
-            {
-                ifEnemyNPCTopNearbyForDefence = true;
-            }
-            else
-            {
-                ifEnemyNPCTopNearbyForDefence = false;
-            }
-
-            if (holdBomb && enemyNPCTopDistance < minimumDistanceForPassingRandom)
-            {
-                ifEnemyNPCTopNearbyForPassingRandom = true;
-            }
-            else
-            {
-                ifEnemyNPCTopNearbyForPassingRandom = false;
-            }
-            
-            if (enemyNPCTopDistance < minimumDistanceForMovementBlocking)
-            {
-                ifEnemyNPCTopNearbyForMovementBlocking = true;
-            }
-            else
-            {
-                ifEnemyNPCTopNearbyForMovementBlocking = false;
-            }
-
-            if (enemyNPCTopDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyNPCTopNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyNPCTopNearbyForAttack = false;
-            }
-
-        }
-
-        if (enemyNPCMiddle)
+        if (!GameMenus.ifPause)
         {
 
-            enemyNPCMiddleDistance = Vector2.Distance(rb.position, enemyNPCMiddle.GetComponent<Rigidbody2D>().position);
+            //Vector3 playerPosition = friendPlayer.GetComponent<Transform>().position;
+            //Vector3 playerDistance = transform.position - playerPosition;
 
-            if (holdBomb && enemyNPCMiddleDistance < minimumDistanceForShieldActivate)
-            {
-                ifEnemyNPCMiddleNearbyForDefence = true;
-            }
-            else
-            {
-                ifEnemyNPCMiddleNearbyForDefence = false;
-            }
+            RaycastHit2D hit = Physics2D.Raycast(raycastPoint.position, transform.TransformDirection(Vector2.right), 50f);
 
-            if (holdBomb && enemyNPCMiddleDistance < minimumDistanceForPassingRandom)
+            if (hit)
             {
-                ifEnemyNPCMiddleNearbyForPassingRandom = true;
-            }
-            else
-            {
-                ifEnemyNPCMiddleNearbyForPassingRandom = false;
-            }
-            
-            if (enemyNPCMiddleDistance < minimumDistanceForMovementBlocking)
-            {
-                ifEnemyNPCMiddleNearbyForMovementBlocking = true;
-            }
-            else
-            {
-                ifEnemyNPCMiddleNearbyForMovementBlocking = false;
+                raycastColliderName = hit.collider.name;
             }
 
-            if (enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
+            Debug.DrawRay(raycastPoint.position, transform.TransformDirection(Vector2.right) * 50f, Color.red);
+
+            Debug.DrawRay(vbRaycastPoint.position, vbRaycastPoint.TransformDirection(Vector2.right) * 50f, Color.green);
+
+            // Behavior when an enemy player is nearby.
+            if (enemyNPCTop)
             {
-                ifEnemyNPCMiddleNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyNPCMiddleNearbyForAttack = false;
-            }
-        }
+                enemyNPCTopDistance = Vector2.Distance(rb.position, enemyNPCTop.GetComponent<Rigidbody2D>().position);
 
-        if (enemyPlayer)
-        {
-
-            enemyPlayerDistance = Vector2.Distance(rb.position, enemyPlayer.GetComponent<Rigidbody2D>().position);
-
-            if (holdBomb && enemyPlayerDistance < minimumDistanceForShieldActivate)
-            {
-                ifEnemyPlayerNearbyForDefence = true;
-            }
-            else
-            {
-                ifEnemyPlayerNearbyForDefence = false;
-            }
-
-            if (holdBomb && enemyPlayerDistance < minimumDistanceForPassingRandom)
-            {
-                ifEnemyPlayerNearbyForPassingRandom = true;
-            }
-            else
-            {
-                ifEnemyPlayerNearbyForPassingRandom = false;
-            }
-            
-            if (enemyPlayerDistance < minimumDistanceForMovementBlocking)
-            {
-                ifEnemyPlayerNearbyForMovementBlocking = true;
-            }
-            else
-            {
-                ifEnemyPlayerNearbyForMovementBlocking = false;
-            }
-
-            if (enemyPlayerDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyPlayerNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyPlayerNearbyForAttack = false;
-            }
-        }
-
-        if (enemyNPCBottom)
-        {
-            enemyNPCBottomDistance = Vector2.Distance(rb.position, enemyNPCBottom.GetComponent<Rigidbody2D>().position);
-
-            if (holdBomb && enemyNPCBottomDistance < minimumDistanceForShieldActivate)
-            {
-                ifEnemyNPCBottomNearbyForDefence = true;
-            }
-            else
-            {
-                ifEnemyNPCBottomNearbyForDefence = false;
-            }
-
-            if (holdBomb && enemyNPCBottomDistance < minimumDistanceForPassingRandom)
-            {
-                ifEnemyNPCBottomNearbyForPassingRandom = true;
-            }
-            else
-            {
-                ifEnemyNPCBottomNearbyForPassingRandom = false;
-            }
-            
-            if (enemyNPCBottomDistance < minimumDistanceForMovementBlocking)
-            {
-                ifEnemyNPCBottomNearbyForMovementBlocking = true;
-            }
-            else
-            {
-                ifEnemyNPCBottomNearbyForMovementBlocking = false;
-            }
-
-            if (enemyNPCBottomDistance < minimumDistanceForAttackActivate)
-            {
-                ifEnemyNPCBottomNearbyForAttack = true;
-            }
-            else
-            {
-                ifEnemyNPCBottomNearbyForAttack = false;
-            }
-        }
-
-        if (ifEnemyNPCTopNearbyForDefence || ifEnemyNPCMiddleNearbyForDefence || ifEnemyPlayerNearbyForDefence || ifEnemyNPCBottomNearbyForDefence)
-        {
-            ifEnemyNPCNearbyForDefence = true;
-        }
-        else
-        {
-            ifEnemyNPCNearbyForDefence = false;
-        }
-
-        if (ifEnemyNPCTopNearbyForPassingRandom || ifEnemyNPCMiddleNearbyForPassingRandom || ifEnemyPlayerNearbyForPassingRandom || ifEnemyNPCBottomNearbyForPassingRandom)
-        {
-            ifEnemyNPCNearbyForPassingRandom = true;
-        }
-        else
-        {
-            ifEnemyNPCNearbyForPassingRandom = false;
-        }
-
-        if (ifEnemyNPCTopNearbyForMovementBlocking || ifEnemyNPCMiddleNearbyForMovementBlocking || ifEnemyPlayerNearbyForMovementBlocking || ifEnemyNPCBottomNearbyForMovementBlocking)
-        {
-            ifEnemyNPCNearbyForMovementBlocking = true;
-        }
-        else
-        {
-            ifEnemyNPCNearbyForMovementBlocking = false;
-        }
-
-        if (ifEnemyNPCTopNearbyForAttack || ifEnemyNPCMiddleNearbyForAttack || ifEnemyPlayerNearbyForAttack || ifEnemyNPCBottomNearbyForAttack)
-        {
-            ifEnemyNPCNearbyForAttack = true;
-        }
-        else
-        {
-            ifEnemyNPCNearbyForAttack = false;
-        }
-
-        diffForAttack = Vector2.Distance(rb.position, new Vector2(randomXForAttack, randomYForAttack));
-
-        diffForDefence = Vector2.Distance(rb.position, new Vector2(randomXForDefence, randomYForDefence));
-
-        //diffXForAttack = Mathf.Abs(rb.position.x - randomXForAttack);
-
-        //diffYForAttack = Mathf.Abs(rb.position.y - randomYForAttack);
-
-        //diffXForDefence = Mathf.Abs(rb.position.x - randomXForDefence);
-
-        //diffYForDefence = Mathf.Abs(rb.position.y - randomYForDefence);
-
-        //Movement when this NPC hold the bomb
-        if (holdBomb && !isPassing && !isPassingRandom && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
-        {
-            state = true;
-
-            lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
-
-            Movement(lookDir);
-
-            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-            Aiming(angle);
-        }
-        else
-        {
-            state = false;
-        }
-
-        // Movement and aiming when the bomb is on the ground or other Player hold the bomb
-        if (!holdBomb)
-        {
-            bool ifFriendPlayerOrNPCHoldBomb = false;
-
-            if (friendPlayer)
-            {
-                if (friendPlayer.GetComponent<PlayerController>().HoldBomb)
+                if (holdBomb && enemyNPCTopDistance < minimumDistanceForShieldActivate)
                 {
-                    ifFriendPlayerOrNPCHoldBomb = true;
-                }
-            }
-
-            if (friendNPCTop)
-            {
-                if (friendNPCTop.GetComponent<NPCController>().HoldBomb)
-                {
-                    ifFriendPlayerOrNPCHoldBomb = true;
-                }
-            }
-
-            if (friendNPCMiddle)
-            {
-                if (friendNPCMiddle.GetComponent<NPCController>().HoldBomb)
-                {
-                    ifFriendPlayerOrNPCHoldBomb = true;
-                }
-            }
-
-            if (friendNPCBottom)
-            {
-                if (friendNPCBottom.GetComponent<NPCController>().HoldBomb)
-                {
-                    ifFriendPlayerOrNPCHoldBomb = true;
-                }
-            }
-
-            // When teammates hold the bomb
-            //if (Player1Controller.holdBomb || NPCBottomController12.holdBomb)
-            //PRZYGOTOWANY if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCTop.GetComponent<NPCController>().HoldBomb || friendNPCMiddle.GetComponent<NPCController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
-            //TYLKO NPC BOTTOM if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
-            if (ifFriendPlayerOrNPCHoldBomb)
-            {
-                if (!(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
-                {
-                    state = true;
-
-                    lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
-
-                    rbPositionXCopy = rb.position.x;
-                    rbPositionYCopy = rb.position.y;
-
-                    Movement(lookDir);
-
-                    angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-                    Aiming(angle);
-
-                    // Start timing the time when the enemy is nearby
-                    if (ifEnemyNPCNearbyForMovementBlocking)
-                    {
-                        movementBlockingDuration += Time.deltaTime;
-                    }
-                    else
-                    {
-                        movementBlockingDuration = 0;
-                    }
+                    ifEnemyNPCTopNearbyForDefence = true;
                 }
                 else
                 {
-                    state = false;
-
-                    lookDir = (Vector2)fieldPointGoal.position - rb.position;
-
-                    angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-                    Aiming(angle);
+                    ifEnemyNPCTopNearbyForDefence = false;
                 }
+
+                if (holdBomb && enemyNPCTopDistance < minimumDistanceForPassingRandom)
+                {
+                    ifEnemyNPCTopNearbyForPassingRandom = true;
+                }
+                else
+                {
+                    ifEnemyNPCTopNearbyForPassingRandom = false;
+                }
+
+                if (enemyNPCTopDistance < minimumDistanceForMovementBlocking)
+                {
+                    ifEnemyNPCTopNearbyForMovementBlocking = true;
+                }
+                else
+                {
+                    ifEnemyNPCTopNearbyForMovementBlocking = false;
+                }
+
+                if (enemyNPCTopDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCTopNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCTopNearbyForAttack = false;
+                }
+
+            }
+
+            if (enemyNPCMiddle)
+            {
+
+                enemyNPCMiddleDistance = Vector2.Distance(rb.position, enemyNPCMiddle.GetComponent<Rigidbody2D>().position);
+
+                if (holdBomb && enemyNPCMiddleDistance < minimumDistanceForShieldActivate)
+                {
+                    ifEnemyNPCMiddleNearbyForDefence = true;
+                }
+                else
+                {
+                    ifEnemyNPCMiddleNearbyForDefence = false;
+                }
+
+                if (holdBomb && enemyNPCMiddleDistance < minimumDistanceForPassingRandom)
+                {
+                    ifEnemyNPCMiddleNearbyForPassingRandom = true;
+                }
+                else
+                {
+                    ifEnemyNPCMiddleNearbyForPassingRandom = false;
+                }
+
+                if (enemyNPCMiddleDistance < minimumDistanceForMovementBlocking)
+                {
+                    ifEnemyNPCMiddleNearbyForMovementBlocking = true;
+                }
+                else
+                {
+                    ifEnemyNPCMiddleNearbyForMovementBlocking = false;
+                }
+
+                if (enemyNPCMiddleDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCMiddleNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCMiddleNearbyForAttack = false;
+                }
+            }
+
+            if (enemyPlayer)
+            {
+
+                enemyPlayerDistance = Vector2.Distance(rb.position, enemyPlayer.GetComponent<Rigidbody2D>().position);
+
+                if (holdBomb && enemyPlayerDistance < minimumDistanceForShieldActivate)
+                {
+                    ifEnemyPlayerNearbyForDefence = true;
+                }
+                else
+                {
+                    ifEnemyPlayerNearbyForDefence = false;
+                }
+
+                if (holdBomb && enemyPlayerDistance < minimumDistanceForPassingRandom)
+                {
+                    ifEnemyPlayerNearbyForPassingRandom = true;
+                }
+                else
+                {
+                    ifEnemyPlayerNearbyForPassingRandom = false;
+                }
+
+                if (enemyPlayerDistance < minimumDistanceForMovementBlocking)
+                {
+                    ifEnemyPlayerNearbyForMovementBlocking = true;
+                }
+                else
+                {
+                    ifEnemyPlayerNearbyForMovementBlocking = false;
+                }
+
+                if (enemyPlayerDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyPlayerNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyPlayerNearbyForAttack = false;
+                }
+            }
+
+            if (enemyNPCBottom)
+            {
+                enemyNPCBottomDistance = Vector2.Distance(rb.position, enemyNPCBottom.GetComponent<Rigidbody2D>().position);
+
+                if (holdBomb && enemyNPCBottomDistance < minimumDistanceForShieldActivate)
+                {
+                    ifEnemyNPCBottomNearbyForDefence = true;
+                }
+                else
+                {
+                    ifEnemyNPCBottomNearbyForDefence = false;
+                }
+
+                if (holdBomb && enemyNPCBottomDistance < minimumDistanceForPassingRandom)
+                {
+                    ifEnemyNPCBottomNearbyForPassingRandom = true;
+                }
+                else
+                {
+                    ifEnemyNPCBottomNearbyForPassingRandom = false;
+                }
+
+                if (enemyNPCBottomDistance < minimumDistanceForMovementBlocking)
+                {
+                    ifEnemyNPCBottomNearbyForMovementBlocking = true;
+                }
+                else
+                {
+                    ifEnemyNPCBottomNearbyForMovementBlocking = false;
+                }
+
+                if (enemyNPCBottomDistance < minimumDistanceForAttackActivate)
+                {
+                    ifEnemyNPCBottomNearbyForAttack = true;
+                }
+                else
+                {
+                    ifEnemyNPCBottomNearbyForAttack = false;
+                }
+            }
+
+            if (ifEnemyNPCTopNearbyForDefence || ifEnemyNPCMiddleNearbyForDefence || ifEnemyPlayerNearbyForDefence || ifEnemyNPCBottomNearbyForDefence)
+            {
+                ifEnemyNPCNearbyForDefence = true;
             }
             else
             {
-                // When bomb is on the groung or enemy player hold the bomb
+                ifEnemyNPCNearbyForDefence = false;
+            }
 
+            if (ifEnemyNPCTopNearbyForPassingRandom || ifEnemyNPCMiddleNearbyForPassingRandom || ifEnemyPlayerNearbyForPassingRandom || ifEnemyNPCBottomNearbyForPassingRandom)
+            {
+                ifEnemyNPCNearbyForPassingRandom = true;
+            }
+            else
+            {
+                ifEnemyNPCNearbyForPassingRandom = false;
+            }
+
+            if (ifEnemyNPCTopNearbyForMovementBlocking || ifEnemyNPCMiddleNearbyForMovementBlocking || ifEnemyPlayerNearbyForMovementBlocking || ifEnemyNPCBottomNearbyForMovementBlocking)
+            {
+                ifEnemyNPCNearbyForMovementBlocking = true;
+            }
+            else
+            {
+                ifEnemyNPCNearbyForMovementBlocking = false;
+            }
+
+            if (ifEnemyNPCTopNearbyForAttack || ifEnemyNPCMiddleNearbyForAttack || ifEnemyPlayerNearbyForAttack || ifEnemyNPCBottomNearbyForAttack)
+            {
+                ifEnemyNPCNearbyForAttack = true;
+            }
+            else
+            {
+                ifEnemyNPCNearbyForAttack = false;
+            }
+
+            diffForAttack = Vector2.Distance(rb.position, new Vector2(randomXForAttack, randomYForAttack));
+
+            diffForDefence = Vector2.Distance(rb.position, new Vector2(randomXForDefence, randomYForDefence));
+
+            //diffXForAttack = Mathf.Abs(rb.position.x - randomXForAttack);
+
+            //diffYForAttack = Mathf.Abs(rb.position.y - randomYForAttack);
+
+            //diffXForDefence = Mathf.Abs(rb.position.x - randomXForDefence);
+
+            //diffYForDefence = Mathf.Abs(rb.position.y - randomYForDefence);
+
+            //Movement when this NPC hold the bomb
+            if (holdBomb && !isPassing && !isPassingRandom && !(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
+            {
                 state = true;
 
-                if (followTheBombSwitcher)
+                lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
+
+                Movement(lookDir);
+
+                angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                Aiming(angle);
+            }
+            else
+            {
+                state = false;
+            }
+
+            // Movement and aiming when the bomb is on the ground or other Player hold the bomb
+            if (!holdBomb)
+            {
+                bool ifFriendPlayerOrNPCHoldBomb = false;
+
+                if (friendPlayer)
                 {
-                    followTheBombSwitcher = false;
-
-                    int friendPlayerDistanceToBomb = 9999;
-                    int friendNPCTopDistanceToBomb = 9999;
-                    int friendNPCMiddleDistanceToBomb = 9999;
-                    int friendNPCBottomDistanceToBomb = 9999;
-
-                    int thisNPCDistanceToBomb = (int)Vector3.Distance(gameObject.transform.position, bomb.transform.position);
-
-                    if (friendPlayer)
+                    if (friendPlayer.GetComponent<PlayerController>().HoldBomb)
                     {
-                        friendPlayerDistanceToBomb = (int)Vector3.Distance(friendPlayer.GetComponent<Transform>().position, bomb.transform.position);
-                    }
-
-                    if (friendNPCTop)
-                    {
-                        if (friendNPCTop.name != gameObject.name)
-                        {
-                            friendNPCTopDistanceToBomb = (int)Vector3.Distance(friendNPCTop.GetComponent<Transform>().position, bomb.transform.position);
-                        }
-                    }
-
-                    if (friendNPCMiddle)
-                    {
-                        if (friendNPCMiddle.name != gameObject.name)
-                        {
-                            friendNPCMiddleDistanceToBomb = (int)Vector3.Distance(friendNPCMiddle.GetComponent<Transform>().position, bomb.transform.position);
-                        }
-                    }
-
-                    if (friendNPCBottom)
-                    {
-                        if (friendNPCBottom.name != gameObject.name)
-                        {
-                            friendNPCBottomDistanceToBomb = (int)Vector3.Distance(friendNPCBottom.GetComponent<Transform>().position, bomb.transform.position);
-                        }
-                    }
-
-                    int[] teammatesDistancesToBomb = { friendPlayerDistanceToBomb, friendNPCTopDistanceToBomb, friendNPCMiddleDistanceToBomb, friendNPCBottomDistanceToBomb };
-
-                    // The NPC closest to the bomb will follow the bomb. 
-                    // If the difference in distance to the bomb between two NPCs is less than the acceptableDifferenceInDistanceToBomb, the NPC also follows the bomb.
-                    if ((thisNPCDistanceToBomb - acceptableDifferenceInDistanceToBomb) < teammatesDistancesToBomb.Min())
-                    {
-                        followTheBomb = true;
-                        //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
-                    }
-                    else
-                    {
-                        followTheBomb = false;
-                        //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
+                        ifFriendPlayerOrNPCHoldBomb = true;
                     }
                 }
-               
-                // If this NPC is closer to the bomb, go for bomb
-                if (followTheBomb)
+
+                if (friendNPCTop)
                 {
-                    if (gameObject.name == "TeamRedNPCBottom")
+                    if (friendNPCTop.GetComponent<NPCController>().HoldBomb)
                     {
-                        //Debug.Log(gameObject.name + ": go to bomb");
+                        ifFriendPlayerOrNPCHoldBomb = true;
                     }
-
-                    ifClosserToBombTimer += Time.deltaTime;
-
-                    // ifClosserToBombTimer is used to prevent NPCs glitching. Thus, the above checking which NPC is closer will be executed when the ifClosserToBombTimer exceeds the set time.
-                    if (ifClosserToBombTimer > 0.6f)
-                    {
-                        followTheBombSwitcher = true;
-                        ifClosserToBombTimer = 0;
-                    }
-
-                    lookDir = (Vector2)bomb.transform.position - rb.position;
-
-                    //Debug.Log("NPC Top is closer");
-
-                    //rb.MovePosition(rb.position + lookDir.normalized * moveSpeed * Time.deltaTime);
-                    Movement(lookDir);
-
-                    angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-                    Aiming(angle);
-
                 }
-                // If other NPC is closer to the bomb, go to random field point
-                else
+
+                if (friendNPCMiddle)
                 {
-                    if (gameObject.name == "TeamRedNPCBottom")
+                    if (friendNPCMiddle.GetComponent<NPCController>().HoldBomb)
                     {
-                        //Debug.Log(gameObject.name + ": go to point");
+                        ifFriendPlayerOrNPCHoldBomb = true;
                     }
+                }
 
-                    ifFurtherToBombTimer += Time.deltaTime;
-
-                    if (ifFurtherToBombTimer > 0.6f)
+                if (friendNPCBottom)
+                {
+                    if (friendNPCBottom.GetComponent<NPCController>().HoldBomb)
                     {
-                        followTheBombSwitcher = true;
-                        ifFurtherToBombTimer = 0;
+                        ifFriendPlayerOrNPCHoldBomb = true;
                     }
+                }
 
-                    // If the distance to the point is greater than the set value, the NPC moves to the point.
-                    // When the distance to a point is less than the set value (when the NPC reaches the point), its velocity is set to zero to prevent glitching.
-
-                    // The glitch is that when the NPC reaches the point, it has some velocity which causes the NPC to move for a while longer,
-                    // which causes the NPC to move away from the point, which again requires a return to the point and add a little bit of velocity.
-                    // This situation loops, causing unwanted NPC vibrations. That's why, in else statement below___ rb.velocity = new Vector2(0, 0); ___was used.
-                    if (diffForDefence > 0.1f)
+                // When teammates hold the bomb
+                //if (Player1Controller.holdBomb || NPCBottomController12.holdBomb)
+                //PRZYGOTOWANY if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCTop.GetComponent<NPCController>().HoldBomb || friendNPCMiddle.GetComponent<NPCController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
+                //TYLKO NPC BOTTOM if (friendPlayer.GetComponent<PlayerController>().HoldBomb || friendNPCBottom.GetComponent<NPCController>().HoldBomb)
+                if (ifFriendPlayerOrNPCHoldBomb)
+                {
+                    if (!(diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))
                     {
                         state = true;
 
-                        lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
+                        lookDir = new Vector2(randomXForAttack, randomYForAttack) - rb.position;
 
                         rbPositionXCopy = rb.position.x;
                         rbPositionYCopy = rb.position.y;
@@ -951,220 +807,370 @@ public class NPCController : MonoBehaviour
                     }
                     else
                     {
-                        rb.velocity = new Vector2(0, 0);
-                    }
-                }
-            }
-        }
+                        state = false;
 
-        // To raczej nie dzia³a :(
-        // If state if changing to often (unwanted NPC vibrations) reduce the velocity of NPC to prevent unwanted NPC vibrations
-        if (state)
-        {
-            timeBetweenStateChanging += Time.deltaTime;
-        }
-        else
-        {
-            if ((0 < timeBetweenStateChanging) && (timeBetweenStateChanging < 0.1f))
-            {
-                rb.velocity = new Vector2(0, 0);
-                //Debug.Log(gameObject.name + ": state changing to often");
-            }
-            timeBetweenStateChanging = 0;
-        }
-
-        // Aiming for the goal and shooting
-        //if ((holdBomb && !isPassing && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))) || isShooting || (holdBomb && !isPassing && hit.collider.name == "GoalRight"))
-        if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))))
-        {
-            isShooting = true;
-            lookDir = (Vector2)fieldPointGoal.position - rb.position;
-            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-            Aiming(angle);
-
-            // Shooting after a certain time
-            if (rb.rotation == angle || holdBombTimer < -0.5f)
-            {
-                if (waitTimeBeforeShoot < 0)
-                {
-                    //NPCController.Shoot(bomb, shootForce);
-                    Shooting.Shoot(bomb);
-                    //bomb.layer = 0;
-                    holdBomb = false;
-                    isShooting = false;
-                    ifDrawFieldPointForAttack = true;
-                    ifDrawFieldPointForDefence = true;
-                    raycastColliderName = "none";
-                    waitTimeBeforeShoot = waitTimeBeforeShootRestart;
-                    holdBombTimer = restartholdBombTimer;
-                    holdBombSprite.enabled = false;
-                }
-                else
-                {
-                    waitTimeBeforeShoot -= Time.deltaTime;
-                }
-            }
-
-        }
-
-        // Passing to friendly Player
-        if (holdBomb && isPassing && friendPlayer)
-        {
-            lookDir = (Vector2)friendPlayer.GetComponent<Transform>().position - rb.position;
-            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-            Aiming(angle);
-
-            // Passing bomb after a certain time
-            if (rb.rotation == angle || holdBombTimer < -0.5f)
-            {
-                if (waitTimeBeforeShoot < 0)
-                {
-                    //NPCController.Shoot(bomb, shootForce);
-                    Shooting.Shoot(bomb);
-                    //bomb.layer = 0;
-                    holdBomb = false;
-                    isPassing = false;
-                    ifDrawFieldPointForAttack = true;
-                    ifDrawFieldPointForDefence = true;
-                    waitTimeBeforeShoot = waitTimeBeforeShootRestart;
-                    holdBombTimer = restartholdBombTimer;
-                    holdBombSprite.enabled = false;
-                }
-                else
-                {
-                    waitTimeBeforeShoot -= Time.deltaTime;
-                }
-            }
-        }
-        // Shooting for goal or passing to random player or
-        else if (holdBomb && isPassingRandom)
-        {
-            List<Vector3> objectsForPassing = new List<Vector3>();
-
-            objectsForPassing.Add(fieldPointGoal.position);
-
-            if (friendPlayer)
-            {
-                objectsForPassing.Add(friendPlayer.GetComponent<Transform>().position);
-            }
-
-            if (friendNPCTop)
-            {
-                objectsForPassing.Add(friendNPCTop.GetComponent<Transform>().position);
-            }
-
-            if (friendNPCMiddle)
-            {
-                objectsForPassing.Add(friendNPCMiddle.GetComponent<Transform>().position);
-            }
-
-            if (friendNPCBottom)
-            {
-                objectsForPassing.Add(friendNPCBottom.GetComponent<Transform>().position);
-            }
-
-            int counter = 0;
-
-            do
-            {
-                vbLookDir = objectsForPassing[counter] - virtualBody.position;
-                vbAngle = Mathf.Atan2(vbLookDir.y, vbLookDir.x) * Mathf.Rad2Deg;
-
-                virtualBody.rotation = Quaternion.Euler(0, 0, vbAngle);
-
-                RaycastHit2D hit2 = Physics2D.Raycast(vbRaycastPoint.position, vbRaycastPoint.TransformDirection(Vector2.right), 50f);
-
-                if (hit2)
-                {
-                    raycastColliderName2 = hit2.collider.name;
-
-                    if (raycastColliderName2 == goalName)
-                    {
                         lookDir = (Vector2)fieldPointGoal.position - rb.position;
-                        objectToPassSelected = true;
+
+                        angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                        Aiming(angle);
                     }
-
-                    if (friendPlayer && !objectToPassSelected)
-                    {
-                        if (raycastColliderName2 == friendPlayer.name)
-                        {
-                            lookDir = (Vector2)friendPlayer.GetComponent<Transform>().position - rb.position;
-                            objectToPassSelected = true;
-                        }
-                    }
-
-                    if (friendNPCTop && !objectToPassSelected)
-                    {
-                        if (raycastColliderName2 == friendNPCTop.name)
-                        {
-                            lookDir = (Vector2)friendNPCTop.GetComponent<Transform>().position - rb.position;
-                            objectToPassSelected = true;
-                        }
-                    }
-
-                    if (friendNPCMiddle && !objectToPassSelected)
-                    {
-                        if (raycastColliderName2 == friendNPCMiddle.name)
-                        {
-                            lookDir = (Vector2)friendNPCMiddle.GetComponent<Transform>().position - rb.position;
-                            objectToPassSelected = true;
-                        }
-                    }
-
-                    if (friendNPCBottom && !objectToPassSelected)
-                    {
-                        if (raycastColliderName2 == friendNPCBottom.name)
-                        {
-                            lookDir = (Vector2)friendNPCBottom.GetComponent<Transform>().position - rb.position;
-                            objectToPassSelected = true;
-                        }
-                    }
-                }
-
-                counter++;
-
-            } while (counter != objectsForPassing.Count && !objectToPassSelected);
-
-            if (!objectToPassSelected)
-            {
-                lookDir = new Vector2(-rb.position.x, -rb.position.y);
-                objectToPassSelected = true;
-            }
-
-            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-
-            Aiming(angle);
-
-            // Shooting bomb fot goal or passing bomb to teammate player or teammate NPC after a certain time (waitTimeBeforeShoot)
-            // wait Time Before Shoot it is there to improve the precision of the shot
-            if (rb.rotation == angle || holdBombTimer < -0.5f)
-            {
-                if (waitTimeBeforeShoot < 0)
-                {
-                    //NPCController.Shoot(bomb, shootForce);
-                    Shooting.Shoot(bomb);
-                    //bomb.layer = 0;
-                    holdBomb = false;
-                    isPassingRandom = false;
-                    ifDrawFieldPointForAttack = true;
-                    ifDrawFieldPointForDefence= true;
-                    raycastColliderName2 = "none";
-                    objectToPassSelected = false;
-                    waitTimeBeforeShoot = waitTimeBeforeShootRestart;
-                    holdBombTimer = restartholdBombTimer;
-                    holdBombSprite.enabled = false;
                 }
                 else
                 {
-                    waitTimeBeforeShoot -= Time.deltaTime;
+                    // When bomb is on the groung or enemy player hold the bomb
+
+                    state = true;
+
+                    if (followTheBombSwitcher)
+                    {
+                        followTheBombSwitcher = false;
+
+                        int friendPlayerDistanceToBomb = 9999;
+                        int friendNPCTopDistanceToBomb = 9999;
+                        int friendNPCMiddleDistanceToBomb = 9999;
+                        int friendNPCBottomDistanceToBomb = 9999;
+
+                        int thisNPCDistanceToBomb = (int)Vector3.Distance(gameObject.transform.position, bomb.transform.position);
+
+                        if (friendPlayer)
+                        {
+                            friendPlayerDistanceToBomb = (int)Vector3.Distance(friendPlayer.GetComponent<Transform>().position, bomb.transform.position);
+                        }
+
+                        if (friendNPCTop)
+                        {
+                            if (friendNPCTop.name != gameObject.name)
+                            {
+                                friendNPCTopDistanceToBomb = (int)Vector3.Distance(friendNPCTop.GetComponent<Transform>().position, bomb.transform.position);
+                            }
+                        }
+
+                        if (friendNPCMiddle)
+                        {
+                            if (friendNPCMiddle.name != gameObject.name)
+                            {
+                                friendNPCMiddleDistanceToBomb = (int)Vector3.Distance(friendNPCMiddle.GetComponent<Transform>().position, bomb.transform.position);
+                            }
+                        }
+
+                        if (friendNPCBottom)
+                        {
+                            if (friendNPCBottom.name != gameObject.name)
+                            {
+                                friendNPCBottomDistanceToBomb = (int)Vector3.Distance(friendNPCBottom.GetComponent<Transform>().position, bomb.transform.position);
+                            }
+                        }
+
+                        int[] teammatesDistancesToBomb = { friendPlayerDistanceToBomb, friendNPCTopDistanceToBomb, friendNPCMiddleDistanceToBomb, friendNPCBottomDistanceToBomb };
+
+                        // The NPC closest to the bomb will follow the bomb. 
+                        // If the difference in distance to the bomb between two NPCs is less than the acceptableDifferenceInDistanceToBomb, the NPC also follows the bomb.
+                        if ((thisNPCDistanceToBomb - acceptableDifferenceInDistanceToBomb) < teammatesDistancesToBomb.Min())
+                        {
+                            followTheBomb = true;
+                            //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
+                        }
+                        else
+                        {
+                            followTheBomb = false;
+                            //Debug.Log(gameObject.name + ": followTheBomb: " + followTheBomb);
+                        }
+                    }
+
+                    // If this NPC is closer to the bomb, go for bomb
+                    if (followTheBomb)
+                    {
+                        if (gameObject.name == "TeamRedNPCBottom")
+                        {
+                            //Debug.Log(gameObject.name + ": go to bomb");
+                        }
+
+                        ifClosserToBombTimer += Time.deltaTime;
+
+                        // ifClosserToBombTimer is used to prevent NPCs glitching. Thus, the above checking which NPC is closer will be executed when the ifClosserToBombTimer exceeds the set time.
+                        if (ifClosserToBombTimer > 0.6f)
+                        {
+                            followTheBombSwitcher = true;
+                            ifClosserToBombTimer = 0;
+                        }
+
+                        lookDir = (Vector2)bomb.transform.position - rb.position;
+
+                        //Debug.Log("NPC Top is closer");
+
+                        //rb.MovePosition(rb.position + lookDir.normalized * moveSpeed * Time.deltaTime);
+                        Movement(lookDir);
+
+                        angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                        Aiming(angle);
+
+                    }
+                    // If other NPC is closer to the bomb, go to random field point
+                    else
+                    {
+                        if (gameObject.name == "TeamRedNPCBottom")
+                        {
+                            //Debug.Log(gameObject.name + ": go to point");
+                        }
+
+                        ifFurtherToBombTimer += Time.deltaTime;
+
+                        if (ifFurtherToBombTimer > 0.6f)
+                        {
+                            followTheBombSwitcher = true;
+                            ifFurtherToBombTimer = 0;
+                        }
+
+                        // If the distance to the point is greater than the set value, the NPC moves to the point.
+                        // When the distance to a point is less than the set value (when the NPC reaches the point), its velocity is set to zero to prevent glitching.
+
+                        // The glitch is that when the NPC reaches the point, it has some velocity which causes the NPC to move for a while longer,
+                        // which causes the NPC to move away from the point, which again requires a return to the point and add a little bit of velocity.
+                        // This situation loops, causing unwanted NPC vibrations. That's why, in else statement below___ rb.velocity = new Vector2(0, 0); ___was used.
+                        if (diffForDefence > 0.1f)
+                        {
+                            state = true;
+
+                            lookDir = new Vector2(randomXForDefence, randomYForDefence) - rb.position;
+
+                            rbPositionXCopy = rb.position.x;
+                            rbPositionYCopy = rb.position.y;
+
+                            Movement(lookDir);
+
+                            angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                            Aiming(angle);
+
+                            // Start timing the time when the enemy is nearby
+                            if (ifEnemyNPCNearbyForMovementBlocking)
+                            {
+                                movementBlockingDuration += Time.deltaTime;
+                            }
+                            else
+                            {
+                                movementBlockingDuration = 0;
+                            }
+                        }
+                        else
+                        {
+                            rb.velocity = new Vector2(0, 0);
+                        }
+                    }
                 }
             }
-            
+
+            // To raczej nie dzia³a :(
+            // If state if changing to often (unwanted NPC vibrations) reduce the velocity of NPC to prevent unwanted NPC vibrations
+            if (state)
+            {
+                timeBetweenStateChanging += Time.deltaTime;
+            }
+            else
+            {
+                if ((0 < timeBetweenStateChanging) && (timeBetweenStateChanging < 0.1f))
+                {
+                    rb.velocity = new Vector2(0, 0);
+                    //Debug.Log(gameObject.name + ": state changing to often");
+                }
+                timeBetweenStateChanging = 0;
+            }
+
+            // Aiming for the goal and shooting
+            //if ((holdBomb && !isPassing && ((diffX >= 0 && diffX <= acceptableInaccuracyOfNpcPosition) && (diffY >= 0 && diffY <= acceptableInaccuracyOfNpcPosition))) || isShooting || (holdBomb && !isPassing && hit.collider.name == "GoalRight"))
+            if (isShooting || (holdBomb && !isPassing && !isPassingRandom && (raycastColliderName == goalName || (diffForAttack >= 0 && diffForAttack <= acceptableInaccuracyOfNpcPosition))))
+            {
+                isShooting = true;
+                lookDir = (Vector2)fieldPointGoal.position - rb.position;
+                angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                Aiming(angle);
+
+                // Shooting after a certain time
+                if (rb.rotation == angle || holdBombTimer < -0.5f)
+                {
+                    if (waitTimeBeforeShoot < 0)
+                    {
+                        //NPCController.Shoot(bomb, shootForce);
+                        Shooting.Shoot(bomb);
+                        //bomb.layer = 0;
+                        holdBomb = false;
+                        isShooting = false;
+                        ifDrawFieldPointForAttack = true;
+                        ifDrawFieldPointForDefence = true;
+                        raycastColliderName = "none";
+                        waitTimeBeforeShoot = waitTimeBeforeShootRestart;
+                        holdBombTimer = restartholdBombTimer;
+                        holdBombSprite.enabled = false;
+                    }
+                    else
+                    {
+                        waitTimeBeforeShoot -= Time.deltaTime;
+                    }
+                }
+
+            }
+
+            // Passing to friendly Player
+            if (holdBomb && isPassing && friendPlayer)
+            {
+                lookDir = (Vector2)friendPlayer.GetComponent<Transform>().position - rb.position;
+                angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                Aiming(angle);
+
+                // Passing bomb after a certain time
+                if (rb.rotation == angle || holdBombTimer < -0.5f)
+                {
+                    if (waitTimeBeforeShoot < 0)
+                    {
+                        //NPCController.Shoot(bomb, shootForce);
+                        Shooting.Shoot(bomb);
+                        //bomb.layer = 0;
+                        holdBomb = false;
+                        isPassing = false;
+                        ifDrawFieldPointForAttack = true;
+                        ifDrawFieldPointForDefence = true;
+                        waitTimeBeforeShoot = waitTimeBeforeShootRestart;
+                        holdBombTimer = restartholdBombTimer;
+                        holdBombSprite.enabled = false;
+                    }
+                    else
+                    {
+                        waitTimeBeforeShoot -= Time.deltaTime;
+                    }
+                }
+            }
+            // Shooting for goal or passing to random player or
+            else if (holdBomb && isPassingRandom)
+            {
+                List<Vector3> objectsForPassing = new List<Vector3>();
+
+                objectsForPassing.Add(fieldPointGoal.position);
+
+                if (friendPlayer)
+                {
+                    objectsForPassing.Add(friendPlayer.GetComponent<Transform>().position);
+                }
+
+                if (friendNPCTop)
+                {
+                    objectsForPassing.Add(friendNPCTop.GetComponent<Transform>().position);
+                }
+
+                if (friendNPCMiddle)
+                {
+                    objectsForPassing.Add(friendNPCMiddle.GetComponent<Transform>().position);
+                }
+
+                if (friendNPCBottom)
+                {
+                    objectsForPassing.Add(friendNPCBottom.GetComponent<Transform>().position);
+                }
+
+                int counter = 0;
+
+                do
+                {
+                    vbLookDir = objectsForPassing[counter] - virtualBody.position;
+                    vbAngle = Mathf.Atan2(vbLookDir.y, vbLookDir.x) * Mathf.Rad2Deg;
+
+                    virtualBody.rotation = Quaternion.Euler(0, 0, vbAngle);
+
+                    RaycastHit2D hit2 = Physics2D.Raycast(vbRaycastPoint.position, vbRaycastPoint.TransformDirection(Vector2.right), 50f);
+
+                    if (hit2)
+                    {
+                        raycastColliderName2 = hit2.collider.name;
+
+                        if (raycastColliderName2 == goalName)
+                        {
+                            lookDir = (Vector2)fieldPointGoal.position - rb.position;
+                            objectToPassSelected = true;
+                        }
+
+                        if (friendPlayer && !objectToPassSelected)
+                        {
+                            if (raycastColliderName2 == friendPlayer.name)
+                            {
+                                lookDir = (Vector2)friendPlayer.GetComponent<Transform>().position - rb.position;
+                                objectToPassSelected = true;
+                            }
+                        }
+
+                        if (friendNPCTop && !objectToPassSelected)
+                        {
+                            if (raycastColliderName2 == friendNPCTop.name)
+                            {
+                                lookDir = (Vector2)friendNPCTop.GetComponent<Transform>().position - rb.position;
+                                objectToPassSelected = true;
+                            }
+                        }
+
+                        if (friendNPCMiddle && !objectToPassSelected)
+                        {
+                            if (raycastColliderName2 == friendNPCMiddle.name)
+                            {
+                                lookDir = (Vector2)friendNPCMiddle.GetComponent<Transform>().position - rb.position;
+                                objectToPassSelected = true;
+                            }
+                        }
+
+                        if (friendNPCBottom && !objectToPassSelected)
+                        {
+                            if (raycastColliderName2 == friendNPCBottom.name)
+                            {
+                                lookDir = (Vector2)friendNPCBottom.GetComponent<Transform>().position - rb.position;
+                                objectToPassSelected = true;
+                            }
+                        }
+                    }
+
+                    counter++;
+
+                } while (counter != objectsForPassing.Count && !objectToPassSelected);
+
+                if (!objectToPassSelected)
+                {
+                    lookDir = new Vector2(-rb.position.x, -rb.position.y);
+                    objectToPassSelected = true;
+                }
+
+                angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
+                Aiming(angle);
+
+                // Shooting bomb fot goal or passing bomb to teammate player or teammate NPC after a certain time (waitTimeBeforeShoot)
+                // wait Time Before Shoot it is there to improve the precision of the shot
+                if (rb.rotation == angle || holdBombTimer < -0.5f)
+                {
+                    if (waitTimeBeforeShoot < 0)
+                    {
+                        //NPCController.Shoot(bomb, shootForce);
+                        Shooting.Shoot(bomb);
+                        //bomb.layer = 0;
+                        holdBomb = false;
+                        isPassingRandom = false;
+                        ifDrawFieldPointForAttack = true;
+                        ifDrawFieldPointForDefence = true;
+                        raycastColliderName2 = "none";
+                        objectToPassSelected = false;
+                        waitTimeBeforeShoot = waitTimeBeforeShootRestart;
+                        holdBombTimer = restartholdBombTimer;
+                        holdBombSprite.enabled = false;
+                    }
+                    else
+                    {
+                        waitTimeBeforeShoot -= Time.deltaTime;
+                    }
+                }
+
+            }
+            //Debug.Log("holdBomb: " + holdBomb + "  isPassingRandom: " + isPassingRandom + "  objectToPassSelected: " + objectToPassSelected);
+            //Debug.Log("vbRotationZ = " + vbRotationZ + "  vbAngle = " + vbAngle);
         }
-        //Debug.Log("holdBomb: " + holdBomb + "  isPassingRandom: " + isPassingRandom + "  objectToPassSelected: " + objectToPassSelected);
-        //Debug.Log("vbRotationZ = " + vbRotationZ + "  vbAngle = " + vbAngle);
     }
 
     void Movement(Vector2 lookDir)

@@ -5,12 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public GameMenus PauseMenu;
+    [SerializeField] GameMenus pauseMenu;
+    GameMenus gameMenusScript;
+
     // Start is called before the first frame update
     void Start()
     {
         //Time.timeScale = 0;
         //SceneManager.LoadScene("Menu");
+
+        gameMenusScript = pauseMenu.GetComponent<GameMenus>();
     }
 
     // Update is called once per frame
@@ -19,18 +23,23 @@ public class GameController : MonoBehaviour
         if (MatchTime.matchDuration <= 0)
         {
             Time.timeScale = 0;
-            PauseMenu.Setup(false);
+            pauseMenu.Setup(false);
         }
         if (Input.GetButtonDown("Cancel"))
         {
             if (GameMenus.ifPause)
             {
-                PauseMenu.ResumeMatch();
+                pauseMenu.ResumeMatch();
             }
             else
             {
-                PauseMenu.GamePause();
+                pauseMenu.GamePause();
             }
+        }
+
+        if (gameMenusScript.ifStart)
+        {
+            gameMenusScript.CountingDownAndStartMatch();
         }
     }
 }
