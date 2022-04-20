@@ -15,6 +15,9 @@ public class GameMenus : MonoBehaviour
     [SerializeField] GameObject timeBeforeMatchStarts;
     TimeBeforeMatchStarts timeBeforeMatchStartsScript;
 
+    [SerializeField] GameObject countingTimeAfterGoal;
+    CountingTimeAfterGoal countingTimeAfterGoalScript;
+
     [SerializeField] GameObject score;
     [SerializeField] GameObject restart;
     [SerializeField] GameObject exit;
@@ -25,6 +28,10 @@ public class GameMenus : MonoBehaviour
     public bool ifStart = false;
 
     public static bool ifPause = false;
+    
+
+    public string test = "GameMenus";
+
 
     private void Start()
     {
@@ -112,8 +119,6 @@ public class GameMenus : MonoBehaviour
     float time = 3.99f;
     public void CountingDownAndStartMatch()
     {
-        
-
         if (time > 1.1f)
         {
             time -= Time.deltaTime;

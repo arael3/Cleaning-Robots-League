@@ -201,7 +201,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameMenus.ifPause)
+        if (Bomb.afterGoal)
+        {
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            transform.position = new Vector3(-3.0f, 0f, 0f);
+        }
+
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
         {
             movement.x = Input.GetAxisRaw("Horizontal");
 
@@ -425,7 +431,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameMenus.ifPause)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
         {
             // Behavior when an enemy player is nearby.
             //enemyDistanceX = Mathf.Abs(rb.position.x - enemy.position.x);

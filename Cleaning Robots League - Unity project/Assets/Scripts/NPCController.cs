@@ -336,7 +336,13 @@ public class NPCController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameMenus.ifPause)
+        if (Bomb.afterGoal)
+        {
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            transform.position = StartingPosition(gameObject);
+        }
+
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
         {
             if (holdBomb)
             {
@@ -486,7 +492,7 @@ public class NPCController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameMenus.ifPause)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
         {
 
             //Vector3 playerPosition = friendPlayer.GetComponent<Transform>().position;

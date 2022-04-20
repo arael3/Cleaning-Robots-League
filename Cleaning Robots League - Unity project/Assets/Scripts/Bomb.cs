@@ -16,10 +16,19 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject teamRedNPCMiddle;
     [SerializeField] GameObject teamRedNPCBottom;
 
+    [SerializeField] GameObject countingTimeAfterGoal;
+
+
+
     public static int teamBlueScore = 0;
     public static int teamRedScore = 0;
 
     public static bool onGround = true;
+
+    public static bool afterGoal = false;
+
+    float timeAfterGoal = 0.1f;
+    float timeAfterGoalRestart = 0.1f;
 
     bool ifAnyPlayerOrNPCHoldBomb = false;
 
@@ -31,6 +40,11 @@ public class Bomb : MonoBehaviour
     bool teamRedNPCTopHoldBomb = false;
     bool teamRedNPCMiddleHoldBomb = false;
     bool teamRedNPCBottomHoldBomb = false;
+
+    private void Start()
+    {
+
+    }
 
     private void Update()
     {
@@ -72,6 +86,19 @@ public class Bomb : MonoBehaviour
             ifAnyPlayerOrNPCHoldBomb = false;
             gameObject.layer = 0;
         }
+
+        if (afterGoal)
+        {
+            timeAfterGoal -= Time.deltaTime;
+        }
+
+        if (timeAfterGoal <= 0)
+        {
+            countingTimeAfterGoal.SetActive(true);
+            CountingTimeAfterGoal.ifPauseAfterGoal = true;
+            afterGoal = false;
+            timeAfterGoal = timeAfterGoalRestart;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -83,17 +110,47 @@ public class Bomb : MonoBehaviour
 
         if (collisionObjectTag == "GoalRight")
         {
+            afterGoal = true;
+
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
             teamBlueScore += 1;
-            gameObject.transform.position = new Vector3(0f, 0f, 0f);
 
+            if (teamRedPlayer)
+            {
+                teamRedPlayer.GetComponent<PlayerController>().HoldBomb = true;
+                gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.position = teamRedPlayer.transform.position;
+            }
+            else
+            {
+                teamRedNPCMiddle.GetComponent<NPCController>().HoldBomb = true;
+                gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.position = teamRedNPCMiddle.transform.position;
+            }   
         }
         else if (collisionObjectTag == "GoalLeft")
         {
+            afterGoal = true;
+
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             teamRedScore += 1;
-            gameObject.transform.position = new Vector3(0f, 0f, 0f);
 
+            if (teamBluePlayer)
+            {
+                teamBluePlayer.GetComponent<PlayerController>().HoldBomb = true;
+                gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.position = teamBluePlayer.transform.position;
+            }
+            else
+            {
+                teamBlueNPCMiddle.GetComponent<NPCController>().HoldBomb = true;
+                gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.GetComponent<Renderer>().enabled = false;
+                gameObject.transform.position = teamBlueNPCMiddle.transform.position;
+            }
         }
         else if (collisionObjectTag == "PlayerOrNPC")
         {
