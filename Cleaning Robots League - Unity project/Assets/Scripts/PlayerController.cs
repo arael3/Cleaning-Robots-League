@@ -115,8 +115,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        transform.position = new Vector3(-3.0f, 0f, 0f);
-        //transform.position = new Vector3(0f, 0f, 0f);
+        
+        //transform.position = new Vector3(-3.0f, 0f, 0f);
+        transform.position = StartingPosition(gameObject);
 
         // Finding which team the NPC belongs to
         if (gameObject.name == "TeamBluePlayer")
@@ -201,13 +202,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("GameMenus.ifPause " + GameMenus.ifPause);
+        Debug.Log("CountingTimeAfterGoal.ifPauseAfterGoal " + CountingTimeAfterGoal.ifPauseAfterGoal);
         if (Bomb.afterGoal)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-            transform.position = new Vector3(-3.0f, 0f, 0f);
+            holdBombTimer = restartholdBombTimer;
+            shieldDuration = 0f;
+            shieldSprite.enabled = false;
+            shieldSpriteEnabled = false;
+            attackDuration = 0f;
+            duringAttack = false;
+            waitForShield = 0f;
+            waitForAttack = 0f;
+            transform.position = StartingPosition(gameObject);
         }
 
-        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal && !GameController.ifGameOver)
         {
             movement.x = Input.GetAxisRaw("Horizontal");
 
@@ -431,7 +442,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal && !GameController.ifGameOver)
         {
             // Behavior when an enemy player is nearby.
             //enemyDistanceX = Mathf.Abs(rb.position.x - enemy.position.x);
@@ -517,5 +528,28 @@ public class PlayerController : MonoBehaviour
                 ifEnemyNPCNearbyForAttack = false;
             }
         }
+    }
+
+    public Vector3 StartingPosition(GameObject gameObject)
+    {
+        float x;
+        float y;
+
+        switch (gameObject.name)
+        {
+            case "TeamBluePlayer":
+                x = -4f;
+                y = 0f;
+                break;
+            case "TeamRedPlayer":
+                x = 4f;
+                y = 0f;
+                break;  
+            default:
+                x = 0f;
+                y = -5f;
+                break;
+        }
+        return new Vector3(x, y, 0f);
     }
 }

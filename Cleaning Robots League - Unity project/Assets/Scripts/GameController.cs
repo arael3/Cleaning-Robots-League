@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     [SerializeField] GameMenus pauseMenu;
     GameMenus gameMenusScript;
 
+    public static bool ifGameOver = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +22,17 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Time.timeScale " + Time.timeScale);
         if (MatchTime.matchDuration <= 0)
         {
-            Time.timeScale = 0;
-            pauseMenu.Setup(false);
+            if (!ifGameOver)
+            {
+                Time.timeScale = 0;
+                pauseMenu.IfPause(false);
+                ifGameOver = true;
+                CountingTimeAfterGoal.ifPauseAfterGoal = false;
+                Bomb.afterGoal = false;
+            }
         }
         if (Input.GetButtonDown("Cancel"))
         {

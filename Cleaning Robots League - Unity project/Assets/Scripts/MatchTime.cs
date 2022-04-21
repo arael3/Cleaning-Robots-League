@@ -7,7 +7,7 @@ public class MatchTime : MonoBehaviour
 {
     Text matchTime;
 
-    public static int matchDuration = 300;
+    public static int matchDuration = 5;
 
     float second;
     

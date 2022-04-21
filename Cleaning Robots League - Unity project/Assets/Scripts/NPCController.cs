@@ -339,10 +339,18 @@ public class NPCController : MonoBehaviour
         if (Bomb.afterGoal)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            holdBombTimer = restartholdBombTimer;
+            shieldDuration = 0f;
+            shieldSprite.enabled = false;
+            shieldSpriteEnabled = false;
+            attackDuration = 0f;
+            duringAttack = false;
+            waitForShield = 0f;
+            waitForAttack = 0f;
             transform.position = StartingPosition(gameObject);
         }
 
-        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal && !GameController.ifGameOver)
         {
             if (holdBomb)
             {
@@ -492,7 +500,7 @@ public class NPCController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal)
+        if (!GameMenus.ifPause && !CountingTimeAfterGoal.ifPauseAfterGoal && !GameController.ifGameOver)
         {
 
             //Vector3 playerPosition = friendPlayer.GetComponent<Transform>().position;
@@ -1208,27 +1216,27 @@ public class NPCController : MonoBehaviour
         switch (gameObject.name)
         {
             case "TeamBlueNPCTop":
-                x = -5f;
+                x = -6f;
                 y = 5f;
                 break;
             case "TeamBlueNPCMiddle":
-                x = -3f;
+                x = -4f;
                 y = 0f;
                 break;
             case "TeamBlueNPCBottom":
-                x = -5f;
+                x = -6f;
                 y = -5f;
                 break;
             case "TeamRedNPCTop":
-                x = 5f;
+                x = 6f;
                 y = 5f;
                 break;
             case "TeamRedNPCMiddle":
-                x = 3f;
+                x = 4f;
                 y = 0f;
                 break;
             case "TeamRedNPCBottom":
-                x = 5f;
+                x = 6f;
                 y = -5f;
                 break;
             default:
