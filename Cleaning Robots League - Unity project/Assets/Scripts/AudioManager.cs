@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     public static AudioManager instance;
-    
+
     void Awake()
     {
         if (instance == null)
@@ -30,6 +30,11 @@ public class AudioManager : MonoBehaviour
             s.source.spatialBlend = s.spatialBlend;
             s.source.loop = s.loop;
         }
+    }
+
+    private void Start()
+    {
+        //Play("Theme");
     }
 
     public void Play(string name)

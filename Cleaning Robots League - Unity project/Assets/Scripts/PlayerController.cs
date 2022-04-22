@@ -116,9 +116,13 @@ public class PlayerController : MonoBehaviour
 
     public const float restartholdBombTimer = 1.5f;
 
+    AudioSource movingSound;
+
     private void Start()
     {
         //gameMenusScript = pauseMenu.GetComponent<GameMenus>();
+
+        movingSound = gameObject.GetComponent<AudioSource>();
 
         transform.position = StartingPosition(gameObject);
 
@@ -244,14 +248,17 @@ public class PlayerController : MonoBehaviour
 
             if (movement.x != 0 || movement.y != 0)
             {
-                if (!FindObjectOfType<AudioManager>().isPlaying("P1Moving"))
+                if (!movingSound.isPlaying)
                 {
-                    FindObjectOfType<AudioManager>().Play("P1Moving");
+                    movingSound.Play();
                 }
             }
             else
             {
-                FindObjectOfType<AudioManager>().Stop("P1Moving");
+                if (movingSound.isPlaying)
+                {
+                    movingSound.Stop();
+                }    
             }
 
             mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
