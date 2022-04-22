@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] GameObject mainMenu;
-    GameMenus gameMenusScript;
+    //[SerializeField] GameObject mainMenu;
+    //GameMenus gameMenusScript;
     // Start is called before the first frame update
     void Start()
     {
-        gameMenusScript = mainMenu.GetComponent<GameMenus>();
+        //gameMenusScript = mainMenu.GetComponent<GameMenus>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameMenusScript.ifStart)
+        if (GameMenus.ifStart)
         {
-            gameMenusScript.CountingDownAndStartMatch();
+            GameMenus.CountingDownAndStartMatch();
         }
     }
 }

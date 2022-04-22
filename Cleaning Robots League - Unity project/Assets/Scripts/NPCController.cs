@@ -21,6 +21,9 @@ public class NPCController : MonoBehaviour
 
     [SerializeField] GameObject bomb;
 
+    //[SerializeField] GameObject pauseMenu;
+    //GameMenus gameMenusScript;
+
     // Do przeniesienia do GameController
     // Dostêpne wartoœci: "BluePlayer vs RedNPC", "RedPlayer vs BlueNPC", "BluePlayer vs RedPlayer"
     // Na czas testów domyœlna wartoœæ "BluePlayer vs NPC"
@@ -224,6 +227,8 @@ public class NPCController : MonoBehaviour
 
     void Start()
     {
+        //gameMenusScript = pauseMenu.GetComponent<GameMenus>();
+
         // Finding which team the NPC belongs to
         if (gameObject.name == "TeamBlueNPCTop" || gameObject.name == "TeamBlueNPCMiddle" || gameObject.name == "TeamBlueNPCBottom")
         {
@@ -336,6 +341,23 @@ public class NPCController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameController.ifGameOver || GameMenus.ifStart)
+        {
+            holdBomb = false;
+            holdBombSprite.enabled = false;
+
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            holdBombTimer = restartholdBombTimer;
+            shieldDuration = 0f;
+            shieldSprite.enabled = false;
+            shieldSpriteEnabled = false;
+            attackDuration = 0f;
+            duringAttack = false;
+            waitForShield = 0f;
+            waitForAttack = 0f;
+            transform.position = StartingPosition(gameObject);
+        }
+
         if (Bomb.afterGoal)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);

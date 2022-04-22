@@ -14,10 +14,10 @@ public class GameMenus : MonoBehaviour
     
 
     [SerializeField] GameObject timeBeforeMatchStarts;
-    TimeBeforeMatchStarts timeBeforeMatchStartsScript;
+    //TimeBeforeMatchStarts timeBeforeMatchStartsScript;
 
     [SerializeField] GameObject countingTimeAfterGoal;
-    CountingTimeAfterGoal countingTimeAfterGoalScript;
+    //CountingTimeAfterGoal countingTimeAfterGoalScript;
 
     [SerializeField] GameObject score;
     [SerializeField] GameObject restart;
@@ -26,7 +26,7 @@ public class GameMenus : MonoBehaviour
     [SerializeField] TextMeshProUGUI GameScreenTitle;
 
     [HideInInspector]
-    public bool ifStart = false;
+    public static bool ifStart = false;
 
     public static bool ifPause = false;
     
@@ -36,10 +36,10 @@ public class GameMenus : MonoBehaviour
 
     private void Start()
     {
-        if (timeBeforeMatchStarts)
-        {
-            timeBeforeMatchStartsScript = timeBeforeMatchStarts.GetComponent<TimeBeforeMatchStarts>();
-        }
+        //if (timeBeforeMatchStarts)
+        //{
+            //timeBeforeMatchStartsScript = timeBeforeMatchStarts.GetComponent<TimeBeforeMatchStarts>();
+        //}
     }
 
     public void IfPause(bool ifPause)
@@ -52,7 +52,6 @@ public class GameMenus : MonoBehaviour
         {
             GameScreenTitle.text = "GAME OVER";
             resumeButton.SetActive(false);
-            countingTimeAfterGoal.SetActive(false);
         }
 
         gameObject.SetActive(true);
@@ -62,6 +61,7 @@ public class GameMenus : MonoBehaviour
     {
         if (MatchTime.matchDuration > 0)
         {
+            countingTimeAfterGoal.SetActive(false);
             IfPause(true);
             Time.timeScale = 0;
             ifPause = true;
@@ -72,9 +72,13 @@ public class GameMenus : MonoBehaviour
     {
         if (MatchTime.matchDuration > 0)
         {
-            gameObject.SetActive(false);
             Time.timeScale = 1;
+            if (CountingTimeAfterGoal.ifPauseAfterGoal)
+            {
+                countingTimeAfterGoal.SetActive(true);
+            }
             ifPause = false;
+            gameObject.SetActive(false);
         }
     }
     
@@ -88,7 +92,6 @@ public class GameMenus : MonoBehaviour
         {
             bomb.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         }
-        
 
         if (resumeButton)
         {
@@ -113,30 +116,18 @@ public class GameMenus : MonoBehaviour
         startButton.SetActive(false);
     }
 
-    //public void RestartMatch()
-    //{
-    //    MatchTime.matchDuration = 300;
-    //    Bomb.teamBlueScore = 0;
-    //    Bomb.teamRedScore = 0;
-    //    SceneManager.LoadScene("Game");
-    //    gameObject.SetActive(false);
-    //    Time.timeScale = 1;
-    //    ifPause = false;
-    //}
-
-    float time = 3.99f;
-    public void CountingDownAndStartMatch()
+    static float time = 3.99f;
+    public static void CountingDownAndStartMatch()
     {
         if (time > 1.1f)
         {
-            MatchTime.matchDuration = 5;
+            MatchTime.matchDuration = MatchTime.matchDurationRestart;
             time -= Time.deltaTime;
-            timeBeforeMatchStartsScript.Time = (int)time;
-            //Debug.Log("time = " + time);
+            TimeBeforeMatchStarts.time = (int)time;
         }
         else
         {
-            MatchTime.matchDuration = 5;
+            MatchTime.matchDuration = MatchTime.matchDurationRestart;
             Bomb.teamBlueScore = 0;
             Bomb.teamRedScore = 0;
 

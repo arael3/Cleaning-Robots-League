@@ -6,27 +6,23 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     [SerializeField] GameMenus pauseMenu;
-    GameMenus gameMenusScript;
+    [SerializeField] GameObject countingTimeAfterGoal;
+    //GameMenus gameMenusScript;
 
     public static bool ifGameOver = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //Time.timeScale = 0;
-        //SceneManager.LoadScene("Menu");
-
-        gameMenusScript = pauseMenu.GetComponent<GameMenus>();
+        //gameMenusScript = pauseMenu.GetComponent<GameMenus>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Debug.Log("Time.timeScale " + Time.timeScale);
         if (MatchTime.matchDuration <= 0)
         {
             if (!ifGameOver)
             {
+                countingTimeAfterGoal.SetActive(false);
                 Time.timeScale = 0;
                 pauseMenu.IfPause(false);
                 ifGameOver = true;
@@ -46,9 +42,9 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (gameMenusScript.ifStart)
+        if (GameMenus.ifStart)
         {
-            gameMenusScript.CountingDownAndStartMatch();
+            GameMenus.CountingDownAndStartMatch();
         }
     }
 }

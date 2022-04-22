@@ -5,7 +5,7 @@ using TMPro;
 
 public class TimeBeforeMatchStarts : MonoBehaviour
 {
-    int time;
+    public static int time;
 
     public int Time
     {

@@ -1949,6 +1949,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 8564342335969439300}
+  countingTimeAfterGoal: {fileID: 524674533}
 --- !u!1 &524674533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1999,7 +2000,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15bc1ca9daec9e40940fb9b02ee2a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: CountingTimeAfterGoal
 --- !u!114 &524674536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41536,7 +41536,6 @@ MonoBehaviour:
   restart: {fileID: 6309737646731281580}
   exit: {fileID: 8751004319417614507}
   GameScreenTitle: {fileID: 4112662832504163056}
-  ifStart: 0
   test: test+
 --- !u!114 &8580540702869584251
 MonoBehaviour:

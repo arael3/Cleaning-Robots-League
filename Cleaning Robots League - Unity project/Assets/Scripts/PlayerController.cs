@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Renderer shieldSprite;
     public Camera cam;
 
+    //[SerializeField] GameObject pauseMenu;
+    //GameMenus gameMenusScript;
+
     [SerializeField] GameObject teamBlueNPCTop;
     [SerializeField] GameObject teamBlueNPCMiddle;
     [SerializeField] GameObject teamBluePlayer;
@@ -115,8 +118,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        
-        //transform.position = new Vector3(-3.0f, 0f, 0f);
+        //gameMenusScript = pauseMenu.GetComponent<GameMenus>();
+
         transform.position = StartingPosition(gameObject);
 
         // Finding which team the NPC belongs to
@@ -202,8 +205,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("GameMenus.ifPause " + GameMenus.ifPause);
-        Debug.Log("CountingTimeAfterGoal.ifPauseAfterGoal " + CountingTimeAfterGoal.ifPauseAfterGoal);
+        if (GameController.ifGameOver || GameMenus.ifStart)
+        {
+            holdBomb = false;
+            holdBombSprite.enabled = false;
+
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            holdBombTimer = restartholdBombTimer;
+            shieldDuration = 0f;
+            shieldSprite.enabled = false;
+            shieldSpriteEnabled = false;
+            attackDuration = 0f;
+            duringAttack = false;
+            waitForShield = 0f;
+            waitForAttack = 0f;
+            transform.position = StartingPosition(gameObject);
+        }
+
         if (Bomb.afterGoal)
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);

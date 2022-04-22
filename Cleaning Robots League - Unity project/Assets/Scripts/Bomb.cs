@@ -16,6 +16,9 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject teamRedNPCMiddle;
     [SerializeField] GameObject teamRedNPCBottom;
 
+    //[SerializeField] GameObject pauseMenu;
+    //GameMenus gameMenusScript;
+
     [SerializeField] GameObject countingTimeAfterGoal;
 
 
@@ -43,7 +46,7 @@ public class Bomb : MonoBehaviour
 
     private void Start()
     {
-
+        //gameMenusScript = pauseMenu.GetComponent<GameMenus>();
     }
 
     private void Update()
@@ -99,6 +102,22 @@ public class Bomb : MonoBehaviour
             afterGoal = false;
             timeAfterGoal = timeAfterGoalRestart;
         }
+
+        if (GameMenus.ifStart)
+        {
+            countingTimeAfterGoal.SetActive(false);
+            CountingTimeAfterGoal.ifPauseAfterGoal = false;
+            afterGoal = false;
+            timeAfterGoal = timeAfterGoalRestart;
+        }
+
+        if (GameController.ifGameOver)
+        {
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            gameObject.GetComponent<Renderer>().enabled = true;
+            onGround = true;
+            gameObject.transform.position = new Vector3(0f, 0f, 0f);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -108,7 +127,7 @@ public class Bomb : MonoBehaviour
         string collisionObjectName = collision.gameObject.name;
         //Debug.Log(collisionObjectName);
 
-        if (collisionObjectTag == "GoalRight")
+        if (collisionObjectTag == "GoalRight" && !GameController.ifGameOver)
         {
             afterGoal = true;
 
@@ -130,7 +149,7 @@ public class Bomb : MonoBehaviour
                 gameObject.transform.position = teamRedNPCMiddle.transform.position;
             }   
         }
-        else if (collisionObjectTag == "GoalLeft")
+        else if (collisionObjectTag == "GoalLeft" && !GameController.ifGameOver)
         {
             afterGoal = true;
 
@@ -152,7 +171,7 @@ public class Bomb : MonoBehaviour
                 gameObject.transform.position = teamBlueNPCMiddle.transform.position;
             }
         }
-        else if (collisionObjectTag == "PlayerOrNPC")
+        else if (collisionObjectTag == "PlayerOrNPC" && !GameController.ifGameOver)
         {
             onGround = false;
 
