@@ -133,6 +133,7 @@ public class Bomb : MonoBehaviour
 
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
             teamBlueScore += 1;
+            FindObjectOfType<AudioManager>().Play("Goal");
 
             if (teamRedPlayer)
             {
@@ -155,6 +156,7 @@ public class Bomb : MonoBehaviour
 
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             teamRedScore += 1;
+            FindObjectOfType<AudioManager>().Play("Goal");
 
             if (teamBluePlayer)
             {
