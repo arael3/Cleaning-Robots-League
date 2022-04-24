@@ -1330,46 +1330,46 @@ public class NPCController : MonoBehaviour
         switch (gameObject.name)
         {
             case "TeamBlueNPCTop":
-                randomXminForAttack = 7;
-                randomXmaxForAttack = 11;
+                randomXminForAttack = 8;
+                randomXmaxForAttack = 12;
                 randomYminForAttack = 1;
-                randomYmaxForAttack = 6;
+                randomYmaxForAttack = 7;
                 break;
             case "TeamBlueNPCMiddle":
                 randomXminForAttack = 4;
-                randomXmaxForAttack = 6;
-                randomYminForAttack = -3;
-                randomYmaxForAttack = 3;
-                break;
-            case "TeamBlueNPCBottom":
-                randomXminForAttack = 8;
-                randomXmaxForAttack = 12;
-                randomYminForAttack = -1;
-                randomYmaxForAttack = -6;
-                break;
-            case "TeamRedNPCTop":
-                randomXminForAttack = -8;
-                randomXmaxForAttack = -12;
-                randomYminForAttack = 1;
-                randomYmaxForAttack = 6;
-                break;
-            case "TeamRedNPCMiddle":
-                randomXminForAttack = -4;
-                randomXmaxForAttack = -6;
-                randomYminForAttack = -3;
-                randomYmaxForAttack = 3;
-                break;
-            case "TeamRedNPCBottom":
-                randomXminForAttack = -7;
-                randomXmaxForAttack = -11;
-                randomYminForAttack = -1;
-                randomYmaxForAttack = -6;
-                break;
-            default:
-                randomXminForAttack = -7;
                 randomXmaxForAttack = 7;
                 randomYminForAttack = -4;
                 randomYmaxForAttack = 4;
+                break;
+            case "TeamBlueNPCBottom":
+                randomXminForAttack = 9;
+                randomXmaxForAttack = 13;
+                randomYminForAttack = -1;
+                randomYmaxForAttack = -7;
+                break;
+            case "TeamRedNPCTop":
+                randomXminForAttack = -9;
+                randomXmaxForAttack = -13;
+                randomYminForAttack = 1;
+                randomYmaxForAttack = 7;
+                break;
+            case "TeamRedNPCMiddle":
+                randomXminForAttack = -4;
+                randomXmaxForAttack = -7;
+                randomYminForAttack = -4;
+                randomYmaxForAttack = 4;
+                break;
+            case "TeamRedNPCBottom":
+                randomXminForAttack = -8;
+                randomXmaxForAttack = -12;
+                randomYminForAttack = -1;
+                randomYmaxForAttack = -7;
+                break;
+            default:
+                randomXminForAttack = -8;
+                randomXmaxForAttack = 8;
+                randomYminForAttack = -5;
+                randomYmaxForAttack = 5;
                 break;
         }
 
@@ -1383,46 +1383,46 @@ public class NPCController : MonoBehaviour
         switch (gameObject.name)
         {
             case "TeamBlueNPCTop":
-                randomXminForDefence = -7;
-                randomXmaxForDefence = -11;
+                randomXminForDefence = -8;
+                randomXmaxForDefence = -12;
                 randomYminForDefence = 1;
-                randomYmaxForDefence = 6;
+                randomYmaxForDefence = 7;
                 break;
             case "TeamBlueNPCMiddle":
                 randomXminForDefence = -4;
-                randomXmaxForDefence = -6;
-                randomYminForDefence = -3;
-                randomYmaxForDefence = 3;
+                randomXmaxForDefence = -7;
+                randomYminForDefence = -4;
+                randomYmaxForDefence = 4;
                 break;
             case "TeamBlueNPCBottom":
-                randomXminForDefence = -8;
-                randomXmaxForDefence = -12;
+                randomXminForDefence = -9;
+                randomXmaxForDefence = -13;
                 randomYminForDefence = -1;
-                randomYmaxForDefence = -6;
+                randomYmaxForDefence = -7;
                 break;
             case "TeamRedNPCTop":
-                randomXminForDefence = 8;
-                randomXmaxForDefence = 12;
+                randomXminForDefence = 9;
+                randomXmaxForDefence = 13;
                 randomYminForDefence = 1;
-                randomYmaxForDefence = 6;
+                randomYmaxForDefence = 7;
                 break;
             case "TeamRedNPCMiddle":
                 randomXminForDefence = 4;
-                randomXmaxForDefence = 6;
-                randomYminForDefence = -3;
-                randomYmaxForDefence = 3;
-                break;
-            case "TeamRedNPCBottom":
-                randomXminForDefence = 7;
-                randomXmaxForDefence = 11;
-                randomYminForDefence = -1;
-                randomYmaxForDefence = -6;
-                break;
-            default:
-                randomXminForDefence = -7;
                 randomXmaxForDefence = 7;
                 randomYminForDefence = -4;
                 randomYmaxForDefence = 4;
+                break;
+            case "TeamRedNPCBottom":
+                randomXminForDefence = 8;
+                randomXmaxForDefence = 12;
+                randomYminForDefence = -1;
+                randomYmaxForDefence = -7;
+                break;
+            default:
+                randomXminForDefence = -8;
+                randomXmaxForDefence = 8;
+                randomYminForDefence = -5;
+                randomYmaxForDefence = 5;
                 break;
         }
 
