@@ -16,14 +16,21 @@ public class MusicOff : MonoBehaviour
 
     void Update()
     {
-        if (!theme.isPlaying)
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            musicOn.SetActive(true);
-            gameObject.SetActive(false);
-        }
+        //if (!theme.isPlaying)
+        //{
+        //    gameObject.SetActive(true);
+        //}
+        //else
+        //{
+        //    musicOn.SetActive(true);
+        //    gameObject.SetActive(false);
+        //}
+    }
+
+    public void MusicPlay()
+    {
+        theme.Play();
+        ThemeMusicController.isMusicPlay = true;
+        gameObject.SetActive(false);
     }
 }

@@ -72,13 +72,6 @@ MonoBehaviour:
     spatialBlend: 0.8
     loop: 0
     source: {fileID: 0}
-  - name: P1Moving
-    clip: {fileID: 8300000, guid: 1ff071c8df018e746be3143beb624f31, type: 3}
-    volume: 0.5
-    pitch: 1
-    spatialBlend: 0.8
-    loop: 0
-    source: {fileID: 0}
   - name: Goal
     clip: {fileID: 8300000, guid: 16f99d5b391ee8b47803b4e178eef401, type: 3}
     volume: 0.7
