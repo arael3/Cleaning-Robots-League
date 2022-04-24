@@ -154,6 +154,7 @@ public class NPCController : MonoBehaviour
     float waitTimeBeforeShoot = 0.11f;
     const float waitTimeBeforeShootRestart = 0.11f;
 
+    // Time for HoldBombTimer is shorter for NPC than for Player, because NPC have additional time when aiming, for increase a precise of shots.
     float holdBombTimer = 1.5f;
 
     public float HoldBombTimer
@@ -1039,7 +1040,7 @@ public class NPCController : MonoBehaviour
 
                 Aiming(angle);
 
-                // Shooting after a certain time
+                // Shooting after a certain time. NPC need some time for a precise shots.
                 if (rb.rotation == angle || holdBombTimer < -0.5f)
                 {
                     if (waitTimeBeforeShoot < 0)
@@ -1072,7 +1073,7 @@ public class NPCController : MonoBehaviour
 
                 Aiming(angle);
 
-                // Passing bomb after a certain time
+                // Passing bomb after a certain time. NPC need some time for a precise shots.
                 if (rb.rotation == angle || holdBombTimer < -0.5f)
                 {
                     if (waitTimeBeforeShoot < 0)
@@ -1193,8 +1194,8 @@ public class NPCController : MonoBehaviour
 
                 Aiming(angle);
 
-                // Shooting bomb fot goal or passing bomb to teammate player or teammate NPC after a certain time (waitTimeBeforeShoot)
-                // wait Time Before Shoot it is there to improve the precision of the shot
+                // Shooting bomb for goal or passing bomb to teammate player or teammate NPC after a certain time (waitTimeBeforeShoot)
+                // wait Time Before Shoot it is there to improve the precision of the NPC shot
                 if (rb.rotation == angle || holdBombTimer < -0.5f)
                 {
                     if (waitTimeBeforeShoot < 0)
@@ -1221,6 +1222,21 @@ public class NPCController : MonoBehaviour
             }
             //Debug.Log("holdBomb: " + holdBomb + "  isPassingRandom: " + isPassingRandom + "  objectToPassSelected: " + objectToPassSelected);
             //Debug.Log("vbRotationZ = " + vbRotationZ + "  vbAngle = " + vbAngle);
+
+            // This condition is triggered in an emergency situation where the NPC does not shoot the bomb even though the time of holdBombTimer has expired.
+            if (holdBomb && holdBombTimer < -0.6f)
+            {
+                Shooting.Shoot(bomb);
+                holdBomb = false;
+                isPassingRandom = false;
+                ifDrawFieldPointForAttack = true;
+                ifDrawFieldPointForDefence = true;
+                raycastColliderName2 = "none";
+                objectToPassSelected = false;
+                waitTimeBeforeShoot = waitTimeBeforeShootRestart;
+                holdBombTimer = restartholdBombTimer;
+                holdBombSprite.enabled = false;
+            }
         }
     }
 

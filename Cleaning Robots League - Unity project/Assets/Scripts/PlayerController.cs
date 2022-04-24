@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
         set { holdBomb = value; }
     }
 
-    float holdBombTimer = 1.5f;
+    float holdBombTimer = 2.0f;
 
     public float HoldBombTimer
     {
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
         set { holdBombTimer = value; }
     }
 
-    public const float restartholdBombTimer = 1.5f;
+    public const float restartholdBombTimer = 2.0f;
 
     AudioSource movingSound;
 
@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (waitForShoot)
+            if (waitForShoot || holdBombTimer < 0f)
             {
                 timeForShipAnimation += Time.deltaTime;
 
