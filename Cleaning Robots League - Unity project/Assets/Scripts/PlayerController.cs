@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
 
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             holdBombTimer = restartholdBombTimer;
-            shieldDuration = 0f;
+            shieldDuration = shieldDurationRestart;
             shieldSprite.enabled = false;
             shieldSpriteEnabled = false;
             attackDuration = 0f;
@@ -230,7 +230,7 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
             holdBombTimer = restartholdBombTimer;
-            shieldDuration = 0f;
+            shieldDuration = shieldDurationRestart;
             shieldSprite.enabled = false;
             shieldSpriteEnabled = false;
             attackDuration = 0f;
@@ -330,8 +330,8 @@ public class PlayerController : MonoBehaviour
             {
                 shieldSprite.enabled = true;
                 shieldSpriteEnabled = true;
-                FindObjectOfType<AudioManager>().Play("Shield");
                 waitForShield = waitForShieldRestart;
+                FindObjectOfType<AudioManager>().Play("Shield");
             }
 
             if (waitForShield > 0)
