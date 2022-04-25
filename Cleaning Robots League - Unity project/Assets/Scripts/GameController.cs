@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
                 Bomb.afterGoal = false;
             }
         }
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P))
         {
             if (GameMenus.ifPause)
             {
